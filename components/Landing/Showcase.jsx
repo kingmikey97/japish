@@ -59,7 +59,7 @@ export default function Showcase() {
                 </ul>
                 
                 <a
-                  href="/profile/mikey"
+                  href="japish/mikey"
                   target="_blank"
                   className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-6 py-3 rounded-xl font-bold hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg hover:shadow-cyan-500/50"
                 >
@@ -80,7 +80,7 @@ export default function Showcase() {
                     {/* Iframe con tu perfil */}
                     <div className="w-full h-full bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 overflow-auto">
                       <iframe
-                        src="/profile/mikey"
+                        src="/japish/mikey"
                         className="w-full h-full border-none"
                         title="Demo de tarjeta JAPISH"
                       />
