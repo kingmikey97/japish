@@ -1,7 +1,6 @@
 'use client';
 
-import { Linkedin, Github, Mail, Phone, Globe, Video, Instagram, Facebook, Twitter, Youtube, MessageCircle, X, ExternalLink } from 'lucide-react';
-import { supabase } from '@/lib/supabase';
+import { Linkedin, Github, Mail, Phone, Globe, Video, Instagram, Facebook, Twitter, Youtube, MessageCircle, X, ExternalLink, Search } from 'lucide-react';import { supabase } from '@/lib/supabase';
 import { useState, useEffect } from 'react';
 
 export default function ProfileCard({ username }) {
@@ -11,56 +10,81 @@ export default function ProfileCard({ username }) {
   const [error, setError] = useState(null);
   const [showChatBubble, setShowChatBubble] = useState(true);
   
-  useEffect(() => {
-    async function fetchProfile() {
-      try {
-        const usernameActual = username || 'mikey';
-        
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('username', usernameActual)
-          .single();
-        
-        if (error) {
-          console.error('Error al obtener perfil:', error);
-          setError(error.message);
-          setLoading(false);
-          return;
+useEffect(() => {
+  async function fetchProfile() {
+    try {
+      const usernameActual = username || 'mikey';
+      
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('username', usernameActual)
+        .single();
+      
+      // ============================================
+      // MANEJO MEJORADO DE ERRORES
+      // ============================================
+      if (error) {
+        // Si el error es que no se encontró el registro
+        if (error.code === 'PGRST116' || error.message?.includes('0 rows')) {
+          console.log(`Perfil "${usernameActual}" no encontrado en base de datos`);
+          setError(`El perfil "${usernameActual}" no existe.`);
+        } else {
+          // Otro tipo de error (conexión, permisos, etc)
+          console.error('Error de Supabase:', error);
+          setError(error.message || 'Error al cargar el perfil. Por favor intenta de nuevo.');
         }
-        
-        if (data && data.social_links) {
-          data.social_links = data.social_links.map(link => {
-            let icon;
-            switch(link.type) {
-              case 'linkedin': icon = Linkedin; break;
-              case 'github': icon = Github; break;
-              case 'email': icon = Mail; break;
-              case 'website': icon = Globe; break;
-              case 'tiktok':
-              case 'youtube': icon = Video; break;
-              case 'instagram': icon = Instagram; break;
-              case 'facebook': icon = Facebook; break;
-              case 'twitter': icon = Twitter; break;
-              case 'whatsapp': icon = MessageCircle; break;
-              default: icon = Globe;
-            }
-            return { ...link, icon };
-          });
-        }
-        
-        setProfileData(data);
         setLoading(false);
-        
-      } catch (err) {
-        console.error('Error inesperado:', err);
-        setError('Error al cargar el perfil');
-        setLoading(false);
+        return;
       }
+      
+      // ============================================
+      // VERIFICAR QUE DATA EXISTE
+      // ============================================
+      if (!data) {
+        console.log(`Perfil "${usernameActual}" no encontrado (data null)`);
+        setError(`El perfil "${usernameActual}" no existe.`);
+        setLoading(false);
+        return;
+      }
+      
+      // ============================================
+      // TRANSFORMAR DATOS
+      // ============================================
+      if (data.social_links) {
+        data.social_links = data.social_links.map(link => {
+          let icon;
+          switch(link.type) {
+            case 'linkedin': icon = Linkedin; break;
+            case 'github': icon = Github; break;
+            case 'email': icon = Mail; break;
+            case 'website': icon = Globe; break;
+            case 'tiktok':
+            case 'youtube': icon = Video; break;
+            case 'instagram': icon = Instagram; break;
+            case 'facebook': icon = Facebook; break;
+            case 'twitter': icon = Twitter; break;
+            case 'whatsapp': icon = MessageCircle; break;
+            default: icon = Globe;
+          }
+          return { ...link, icon };
+        });
+      }
+      
+      setProfileData(data);
+      setLoading(false);
+      
+    } catch (err) {
+      // Error inesperado (red, timeout, etc)
+      console.error('Error inesperado al cargar perfil:', err);
+      setError('Error de conexión. Verifica tu internet e intenta de nuevo.');
+      setLoading(false);
     }
-    
-    fetchProfile();
-  }, [username]);
+  }
+  
+  fetchProfile();
+  
+}, [username]);
   
   if (loading) {
     return (
@@ -73,24 +97,78 @@ export default function ProfileCard({ username }) {
     );
   }
   
-  if (error || !profileData) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800">
-        <div className="text-center text-white">
-          <h1 className="text-4xl font-bold mb-4">😕 Usuario no encontrado</h1>
-          <p className="text-xl text-gray-300 mb-6">
-            {error || `El perfil "${username || 'mikey'}" no existe.`}
+ if (error || !profileData) {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 p-4">
+      <div className="max-w-2xl w-full">
+        
+        {/* Error card */}
+        <div className="bg-white/10 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 p-12 text-center">
+          
+          {/* Icon */}
+          <div className="w-24 h-24 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+            <span className="text-6xl">🔍</span>
+          </div>
+          
+          {/* Title */}
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            Perfil no encontrado
+          </h1>
+          
+          {/* Message */}
+          <p className="text-xl text-gray-300 mb-8">
+            {error || `El perfil "${username || 'mikey'}" no existe en nuestra base de datos.`}
           </p>
-          <a 
-            href="/japish" 
-            className="inline-block bg-cyan-500 px-6 py-3 rounded-lg hover:bg-cyan-600 transition"
-          >
-            Ir a JAPISH
-          </a>
+          
+          {/* Suggestions */}
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-6 mb-8 text-left">
+            <h3 className="text-lg font-bold text-white mb-3">Sugerencias:</h3>
+            <ul className="space-y-2 text-gray-300">
+              <li className="flex items-start gap-2">
+                <span className="text-cyan-400">•</span>
+                <span>Verifica que el username esté escrito correctamente</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-cyan-400">•</span>
+                <span>Prueba buscar en la landing de JAPISH</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-cyan-400">•</span>
+                <span>Ejemplos válidos: <code className="bg-white/10 px-2 py-1 rounded">mikey</code>, <code className="bg-white/10 px-2 py-1 rounded">demo-basico</code></span>
+              </li>
+            </ul>
+          </div>
+          
+          {/* Actions */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a 
+              href="/japish" 
+              className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-8 py-4 rounded-xl font-bold text-lg hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg hover:shadow-cyan-500/50 flex items-center justify-center gap-2"
+            >
+        
+              <Search size={20} />
+              Buscar otro perfil
+            </a>
+            
+            <a
+              href="/"
+              className="bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/20 transition-all border border-white/20 flex items-center justify-center gap-2"
+            >
+              Ir al sitio web de ValhallaTechnology?
+            </a>
+          </div>
+          
         </div>
+        
+        {/* Help text */}
+        <p className="text-center text-gray-400 text-sm mt-6">
+          ¿Necesitas ayuda? <a href="https://wa.me/59177777777" className="text-cyan-400 hover:underline">Contáctanos</a>
+        </p>
+        
       </div>
-    );
-  }
+    </div>
+  );
+}
   
   const handleWhatsApp = () => {
     const message = "Hola! Vi tu tarjeta digital y me gustaría conectar.";

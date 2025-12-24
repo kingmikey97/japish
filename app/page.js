@@ -21,9 +21,9 @@ export default function Home() {
     },
     {
       icon: Server,
-      title: "Infraestructura Cloud",
-      description: "Diseño, migración y optimización de arquitecturas en AWS, Azure y GCP",
-      features: ["Migración a la nube", "DevOps & CI/CD", "Monitoreo 24/7"]
+      title: "Infraestructura Tecnologica",
+      description: "Diseño, migración y optimización de arquitecturas o infraestructura tecnologica",
+      features: ["Mejoramiento/implementacion de red wifi o cableada", "Instalaciones Electricas", "Citofonia", "Camaras de seguridad (analogicas y digitales)","Sistemas de alarmas"]
     },
     {
       icon: Code,
@@ -91,13 +91,13 @@ export default function Home() {
             {/* Subtitle */}
             <p className="text-xl md:text-2xl text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed">
               Soluciones tecnológicas empresariales de <span className="text-amber-400 font-semibold">nivel mundial</span>.
-              Desde ciberseguridad hasta infraestructura cloud de última generación.
+              Desde Servicio tecnico hasta Infraestructura tecnologica.
             </p>
             
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
               <a
-                href="https://wa.me/59164256727?text=Hola! Quiero información sobre servicios de Valhalla Technology"
+                href="https://wa.me/59164256727?text=Hola! Quiero información sobre servicios de ValhallaTechnology"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group bg-gradient-to-r from-amber-500 to-orange-600 text-black px-8 py-4 rounded-xl font-bold text-lg hover:from-amber-400 hover:to-orange-500 transition-all shadow-lg shadow-amber-500/30 hover:shadow-amber-500/50 flex items-center justify-center gap-2"
@@ -256,7 +256,7 @@ export default function Home() {
                     </a>
                     <a
                     
-                      href="/japish/demo-premium"
+                      href="/japish/mikey"
                       className="inline-flex items-center justify-center gap-2 bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/20 transition-all border-2 border-white/30"
                     >
                       Ver Demo
