@@ -328,13 +328,13 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="text-center">
             <div className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500 mb-4">
-              VALHALLA TECHNOLOGY
+              VALHALLATECHNOLOGY
             </div>
             <p className="text-gray-400 mb-6">
               Excelencia tecnológica desde Bolivia para el mundo
             </p>
             <p className="text-sm text-gray-600">
-              © 2025 Valhalla Technology. Todos los derechos reservados.
+              © 2025 ValhallaTechnology. Todos los derechos reservados.
             </p>
           </div>
         </div>
