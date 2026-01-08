@@ -72,7 +72,7 @@ export default function Hero() {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Buscar perfil por username... (ej: mikey)"
+                  placeholder="Escribe un perfil que ya conozcas"
                   className="w-full bg-white/10 backdrop-blur-sm border-2 border-white/20 rounded-2xl px-6 py-5 pl-14 text-white placeholder-gray-400 text-lg focus:outline-none focus:border-cyan-500 transition-all"
                 />
                 {/* Sugerencias populares */}
@@ -104,7 +104,10 @@ export default function Hero() {
               
               {/* Helper text */}
               <p className="text-sm text-gray-400 mt-3 text-left">
-                💡 Ejemplo: busca <span className="text-cyan-400 font-semibold">mikey</span>, <span className="text-cyan-400 font-semibold">demo-basico</span>, o <span className="text-cyan-400 font-semibold">demo-premium</span>
+                💡Si quieres ver nuestros DISEÑOS busca: <span className="text-cyan-400 font-semibold">modelo1</span>, <span className="text-cyan-400 font-semibold">modelo2</span>, <span className="text-cyan-400 font-semibold">modelo3</span>, <span className="text-cyan-400 font-semibold">modelo4</span>, <span className="text-cyan-400 font-semibold">modelo5</span>
+              </p>
+              <p className="text-sm text-gray-400 mt-3 text-left">
+                💡Si quieres ver como se ven los PLANES busca: <span className="text-cyan-400 font-semibold">demo-basico</span>, <span className="text-cyan-400 font-semibold">demo-pro</span>, o <span className="text-cyan-400 font-semibold">demo-premiun</span>
               </p>
             </form>
           </div>

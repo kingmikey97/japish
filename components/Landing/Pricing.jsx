@@ -7,11 +7,11 @@ export default function Pricing() {
   const plans = [
     {
       name: "Básico",
-      price: "200",
+      price: "200 bs.",
       description: "Perfecto para empezar",
       features: [
         "1 tarjeta NFC/QR mas su impresion",
-        "5 diseños a elegir",
+        "3 diseños a elegir",
         "Actualizaciones ilimitadas",
         "Hasta 5 links",
         "Soporte continuo",
@@ -21,11 +21,11 @@ export default function Pricing() {
     },
     {
       name: "Profesional",
-      price: "250",
+      price: "250 bs.",
       description: "El más elegido",
       features: [
         "Todo del plan Básico",
-        "10 diseños premium",
+        "5 diseños premium",
         "Breve apartado de productos o servicios",
         "Hasta 10 Links",
         "Soporte prioritario"
@@ -35,7 +35,7 @@ export default function Pricing() {
     },
     {
       name: "Premium",
-      price: "350",
+      price: "350 bs.",
       description: "Máxima personalización",
       features: [
         "Todo del plan Profesional",
@@ -43,7 +43,8 @@ export default function Pricing() {
         "Hasta tres apartados de tus servicios o productos",
         "Links Ilimitados",
         "Consultoria de Branding",
-        "Soporte 24/7"        
+        "Soporte 24/7",  
+        "(El precio puede variar de acuerdo a complejidad)"      
       ],
       cta: "Ir Premium",
       popular: false
@@ -98,7 +99,7 @@ export default function Pricing() {
               {/* Precio */}
               <div className="mb-6">
                 <span className="text-5xl font-bold text-white">{plan.price}</span>
-                <span className="text-gray-400 ml-2">Bs.</span>
+                <span className="text-gray-400 ml-2"></span>
               </div>
               
               {/* CTA Button */}

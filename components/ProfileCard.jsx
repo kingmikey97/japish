@@ -1,6 +1,6 @@
 'use client';
 
-import { Linkedin, Github, Mail, Phone, Globe, Video, Instagram, Facebook, Twitter, Youtube, MessageCircle, X, ExternalLink, Search } from 'lucide-react';import { supabase } from '@/lib/supabase';
+import {Linkedin, Github, Mail, Phone, Globe, Video, Instagram, Facebook, Twitter, Youtube, MessageCircle, X, ExternalLink, Search } from 'lucide-react';import { supabase } from '@/lib/supabase';
 import { useState, useEffect } from 'react';
 import { getTemplate } from '@/lib/templates';
 import LayoutBasic from './profile-layouts/LayoutBasic';
@@ -208,8 +208,7 @@ return (
       profileData={profileData}
       template={template}
       handleWhatsApp={handleWhatsApp}
-    />
-      
+    />      
       
       {/* APARTADOS DE SERVICIOS */}
       {profileData.services && profileData.services.length > 0 && (
