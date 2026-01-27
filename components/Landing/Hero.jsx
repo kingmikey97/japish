@@ -9,21 +9,22 @@ export default function Hero() {
   const [searching, setSearching] = useState(false);
   const router = useRouter();
   
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    
-    if (!searchQuery.trim()) return;
-    
-    setSearching(true);
-    
-    // Limpiar el query (remover espacios, convertir a lowercase)
-    const cleanQuery = searchQuery.trim().toLowerCase();
-    
-    // Redirigir al perfil
-    router.push(`/japish/${cleanQuery}`);
-    
-    setSearching(false);
-  };
+ const handleSearch = async (e) => {
+  e.preventDefault();
+  
+  if (!searchQuery.trim() || searchQuery.trim().length < 3) {
+    return;
+  }
+  
+  setSearching(true);
+  
+  const cleanQuery = searchQuery.trim();
+  
+  // Redirigir a página de búsqueda
+  router.push(`/japish/buscar?q=${encodeURIComponent(cleanQuery)}`);
+  
+  setSearching(false);
+};
   
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
