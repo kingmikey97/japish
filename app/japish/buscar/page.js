@@ -1,11 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { Search, User, Building, Briefcase, ArrowRight, Loader2 } from 'lucide-react';
 
-export default function BuscarPage() {
+// ============================================
+// COMPONENTE INTERNO - CONTENIDO DE BÚSQUEDA
+// ============================================
+function SearchContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const query = searchParams.get('q') || '';
@@ -17,9 +20,6 @@ export default function BuscarPage() {
   const [hasMore, setHasMore] = useState(true);
   const ITEMS_PER_PAGE = 10;
   
-  // ============================================
-  // FUNCIÓN DE BÚSQUEDA
-  // ============================================
   async function searchProfiles(searchTerm, pageNum = 1, append = false) {
     if (!searchTerm || searchTerm.length < 3) {
       setResults([]);
@@ -29,39 +29,36 @@ export default function BuscarPage() {
     setLoading(true);
     
     try {
-      // ============================================
-      // QUERY A SUPABASE
-      // ============================================
-      // ilike = case-insensitive LIKE
-      // %término% = busca en cualquier parte del texto
-      
-      const { data, error } = await supabase
-  .from('profiles')
-  .select('username, name, title, company, especialization, image, template_id')
-  .or(`username.ilike.%${searchTerm}%,name.ilike.%${searchTerm}%,title.ilike.%${searchTerm}%,company.ilike.%${searchTerm}%,especialization.ilike.%${searchTerm}%`)
-  .range((pageNum - 1) * ITEMS_PER_PAGE, pageNum * ITEMS_PER_PAGE - 1);
+      const { data: allProfiles, error } = await supabase
+        .from('profiles')
+        .select('username, name, title, company, especialization, image, template_id');
       
       if (error) {
-        console.error('Error en búsqueda:', error);
+        console.error('Error:', error);
         setLoading(false);
         return;
       }
       
-      // ============================================
-      // ORDENAMIENTO JUSTO
-      // ============================================
-      // 1. Username exacto primero
-      // 2. Resto aleatorio (shuffle)
+      const searchLower = searchTerm.toLowerCase();
       
-      const exactMatch = data.filter(p => 
-        p.username.toLowerCase() === searchTerm.toLowerCase()
+      const filtered = allProfiles.filter(profile => {
+        return (
+          profile.username?.toLowerCase().includes(searchLower) ||
+          profile.name?.toLowerCase().includes(searchLower) ||
+          profile.title?.toLowerCase().includes(searchLower) ||
+          profile.company?.toLowerCase().includes(searchLower) ||
+          profile.especialization?.toLowerCase().includes(searchLower)
+        );
+      });
+      
+      const exactMatch = filtered.filter(p => 
+        p.username.toLowerCase() === searchLower
       );
       
-      const otherResults = data.filter(p => 
-        p.username.toLowerCase() !== searchTerm.toLowerCase()
+      const otherResults = filtered.filter(p => 
+        p.username.toLowerCase() !== searchLower
       );
       
-      // Shuffle aleatorio (Fisher-Yates)
       for (let i = otherResults.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [otherResults[i], otherResults[j]] = [otherResults[j], otherResults[i]];
@@ -69,16 +66,17 @@ export default function BuscarPage() {
       
       const orderedResults = [...exactMatch, ...otherResults];
       
-      // ============================================
-      // ACTUALIZAR ESTADO
-      // ============================================
+      const start = (pageNum - 1) * ITEMS_PER_PAGE;
+      const end = start + ITEMS_PER_PAGE;
+      const paginatedResults = orderedResults.slice(start, end);
+      
       if (append) {
-        setResults(prev => [...prev, ...orderedResults]);
+        setResults(prev => [...prev, ...paginatedResults]);
       } else {
-        setResults(orderedResults);
+        setResults(paginatedResults);
       }
       
-      setHasMore(orderedResults.length === ITEMS_PER_PAGE);
+      setHasMore(end < orderedResults.length);
       setLoading(false);
       
     } catch (err) {
@@ -87,9 +85,6 @@ export default function BuscarPage() {
     }
   }
   
-  // ============================================
-  // EFECTO: Buscar cuando cambia query en URL
-  // ============================================
   useEffect(() => {
     if (query) {
       setSearchQuery(query);
@@ -97,9 +92,6 @@ export default function BuscarPage() {
     }
   }, [query]);
   
-  // ============================================
-  // HANDLERS
-  // ============================================
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim().length >= 3) {
@@ -119,12 +111,8 @@ export default function BuscarPage() {
       
       <div className="max-w-4xl mx-auto">
         
-        {/* ============================================ */}
-        {/* HEADER + BUSCADOR */}
-        {/* ============================================ */}
         <div className="mb-12">
           
-          {/* Título */}
           <h1 className="text-4xl font-bold text-white mb-2 text-center">
             Buscar Perfiles
           </h1>
@@ -132,7 +120,6 @@ export default function BuscarPage() {
             Encuentra profesionales por nombre, empresa o profesión
           </p>
           
-          {/* Buscador */}
           <form onSubmit={handleSearch} className="relative max-w-2xl mx-auto">
             <input
               type="text"
@@ -156,7 +143,6 @@ export default function BuscarPage() {
             </button>
           </form>
           
-          {/* Helpers */}
           {searchQuery.length > 0 && searchQuery.length < 3 && (
             <p className="text-center text-yellow-400 text-sm mt-3">
               Escribe al menos 3 caracteres para buscar
@@ -165,13 +151,9 @@ export default function BuscarPage() {
           
         </div>
         
-        {/* ============================================ */}
-        {/* RESULTADOS */}
-        {/* ============================================ */}
         {query && (
           <div>
             
-            {/* Header de resultados */}
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl text-white">
                 {loading && page === 1 ? (
@@ -187,18 +169,15 @@ export default function BuscarPage() {
               </h2>
             </div>
             
-            {/* Loading inicial */}
             {loading && page === 1 && (
               <div className="flex justify-center py-12">
                 <Loader2 size={40} className="text-cyan-400 animate-spin" />
               </div>
             )}
             
-            {/* Lista de resultados */}
             {!loading || page > 1 ? (
               <div className="space-y-4">
                 {results.length === 0 && !loading ? (
-                  // Sin resultados
                   <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-12 text-center">
                     <div className="text-6xl mb-4">🔍</div>
                     <h3 className="text-2xl font-bold text-white mb-2">
@@ -216,16 +195,14 @@ export default function BuscarPage() {
                     </a>
                   </div>
                 ) : (
-                  // Grid de resultados
-                  results.map((profile) => (   
-                    <a                 
+                  results.map((profile) => (
+                    <a
                       key={profile.username}
                       href={`/japish/${profile.username}`}
                       className="block bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 hover:border-cyan-500/30 transition-all group"
                     >
                       <div className="flex items-center gap-4">
                         
-                        {/* Avatar */}
                         <div className="flex-shrink-0">
                           <img
                             src={profile.image}
@@ -234,7 +211,6 @@ export default function BuscarPage() {
                           />
                         </div>
                         
-                        {/* Info */}
                         <div className="flex-1 min-w-0">
                           <h3 className="text-lg font-bold text-white mb-1 truncate group-hover:text-cyan-400 transition-colors">
                             {profile.name}
@@ -266,7 +242,6 @@ export default function BuscarPage() {
                           )}
                         </div>
                         
-                        {/* Arrow */}
                         <div className="flex-shrink-0">
                           <ArrowRight 
                             size={24} 
@@ -281,9 +256,6 @@ export default function BuscarPage() {
               </div>
             ) : null}
             
-            {/* ============================================ */}
-            {/* PAGINACIÓN - Botón "Cargar más" */}
-            {/* ============================================ */}
             {hasMore && results.length > 0 && !loading && (
               <div className="mt-8 text-center">
                 <button
@@ -296,14 +268,12 @@ export default function BuscarPage() {
               </div>
             )}
             
-            {/* Loading más resultados */}
             {loading && page > 1 && (
               <div className="flex justify-center py-8">
                 <Loader2 size={32} className="text-cyan-400 animate-spin" />
               </div>
             )}
             
-            {/* Fin de resultados */}
             {!hasMore && results.length > 0 && (
               <p className="text-center text-gray-500 mt-8 pb-8">
                 No hay más resultados
@@ -315,5 +285,23 @@ export default function BuscarPage() {
         
       </div>
     </div>
+  );
+}
+
+// ============================================
+// COMPONENTE PRINCIPAL EXPORTADO
+// ============================================
+export default function BuscarPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 size={48} className="text-cyan-400 animate-spin mx-auto mb-4" />
+          <p className="text-white text-xl">Cargando buscador...</p>
+        </div>
+      </div>
+    }>
+      <SearchContent />
+    </Suspense>
   );
 }
