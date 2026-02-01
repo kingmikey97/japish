@@ -29,7 +29,13 @@ export default function NonStopMadness() {
   useEffect(() => {
     async function cargarAsientosOcupados() {
       try {
-        const { obtenerAsientosNoDisponibles } = await import('@/lib/database-nonstop');
+        const { obtenerAsientosNoDisponibles, expirarReservasVencidas } = await import('@/lib/database-nonstop');
+        
+        // IMPORTANTE: Expirar reservas vencidas ANTES de cargar los asientos
+        // Esto asegura que siempre mostremos información actualizada
+        await expirarReservasVencidas();
+        
+        // Ahora sí cargar los asientos no disponibles
         const asientosNoDisponibles = await obtenerAsientosNoDisponibles();
         setOccupiedSeats(asientosNoDisponibles);
       } catch (error) {
