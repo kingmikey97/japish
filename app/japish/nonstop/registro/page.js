@@ -3,7 +3,6 @@
 import { useState, useEffect, use } from 'react';
 import { X, Download, Music, Volume2, VolumeX, CheckCircle, AlertCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import MusicPlayer from '@/components/MusicPlayer';
 
 export default function RegistroNonStop({ searchParams }) {
   const router = useRouter();
@@ -366,7 +365,7 @@ export default function RegistroNonStop({ searchParams }) {
                 CÓDIGO DE DEPÓSITO
               </h3>
               <p className="text-gray-400 text-sm mb-4">
-                COPIA ESTE CODIGOOOO, es importante...
+                Incluye este código en la descripción de tu depósito
               </p>
               <div className="bg-black/50 border-2 border-yellow-400 rounded-xl p-4 inline-block">
                 <code className="text-3xl md:text-4xl font-black text-yellow-400 tracking-wider">
@@ -402,12 +401,16 @@ export default function RegistroNonStop({ searchParams }) {
       </div>
       
       {/* Botón de música (esquina inferior izquierda) */}
-    
-  <div className="min-h-screen...">
-   
-    <MusicPlayer />
-  </div>
-
+      <button
+        onClick={toggleMusic}
+        className="fixed bottom-6 left-6 w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all z-50"
+      >
+        {musicMuted ? (
+          <VolumeX size={28} className="text-white" />
+        ) : (
+          <Volume2 size={28} className="text-white" />
+        )}
+      </button>
       
       {/* Modal de QR */}
       {showQRModal && (
@@ -477,8 +480,13 @@ function QRModal({ codigoDeposito, selectedSeats, formData, bebidaPreferida, onC
         <div className="sticky top-0 bg-gradient-to-r from-yellow-400 to-orange-500 p-6 rounded-t-3xl flex items-center justify-between z-10">
           <h2 className="text-3xl font-black text-gray-900">¡RESERVA CONFIRMADA!</h2>
           <button
-            onClick={onClose}
+            onClick={() => {
+              onClose();
+              // Redirigir a la página de selección de asientos
+              window.location.href = '/japish/nonstop';
+            }}
             className="w-10 h-10 bg-gray-900 rounded-full flex items-center justify-center hover:scale-110 transition-all"
+            title="Cerrar y volver a inicio"
           >
             <X size={24} className="text-white" />
           </button>
@@ -534,9 +542,9 @@ function QRModal({ codigoDeposito, selectedSeats, formData, bebidaPreferida, onC
             <div className="bg-yellow-400/20 border-2 border-yellow-400 rounded-2xl p-6 mb-8">
               <h3 className="text-yellow-400 font-black text-xl mb-4">📱 INSTRUCCIONES DE PAGO</h3>
               <ol className="text-white space-y-2 list-decimal list-inside">
-                <li className="font-bold">Realiza el depósito de <span className="text-yellow-400">Bs.  {totalPagar}</span> por cada asiento</li>
-                <li className="font-bold">En la descripción o concepto del depósito incluye: <code className="bg-black/50 px-2 py-1 rounded text-yellow-400">{codigoDeposito}</code></li>
-                <li className="font-bold">Envía el comprobante por WhatsApp al: <a href={`https://wa.me/${whatsappPagos}`} target="_blank" rel="noopener noreferrer" className="text-green-400 underline hover:text-green-300">+{whatsappPagos}</a> o tu staff favorito</li>
+                <li className="font-bold">Realiza el depósito de <span className="text-yellow-400">Bs. {totalPagar}</span></li>
+                <li className="font-bold">En la descripción del depósito incluye: <code className="bg-black/50 px-2 py-1 rounded text-yellow-400">{codigoDeposito}</code></li>
+                <li className="font-bold">Envía el comprobante por WhatsApp al: <a href={`https://wa.me/${whatsappPagos}`} target="_blank" rel="noopener noreferrer" className="text-green-400 underline hover:text-green-300">+{whatsappPagos}</a></li>
                 <li className="font-bold">Recibirás confirmación en máximo 2 horas</li>
               </ol>
               
@@ -584,7 +592,5 @@ function QRModal({ codigoDeposito, selectedSeats, formData, bebidaPreferida, onC
         
       </div>
     </div>
-
-    
   );
 }
