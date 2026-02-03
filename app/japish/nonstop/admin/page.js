@@ -1,13 +1,24 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { CheckCircle, XCircle, Clock, Users, DollarSign, RefreshCw, Eye, Filter } from 'lucide-react';
+import { CheckCircle, XCircle, Clock, Users, DollarSign, RefreshCw, Eye, Filter, Lock } from 'lucide-react';
+
+// ============================================
+// CREDENCIALES DE ADMIN (Cambiar según necesites)
+// ============================================
+const ADMIN_CREDENTIALS = [
+  { username: 'admin', password: 'nonstop2025' },
+  { username: 'miguel', password: 'miguel123' },
+  { username: 'juan', password: 'juan123' },
+];
 
 export default function PanelAdmin() {
+  // ⚠️ IMPORTANTE: Todos los hooks ANTES de cualquier return condicional
+  const [autenticado, setAutenticado] = useState(false);
+  const [usuarioActual, setUsuarioActual] = useState('');
   const [reservas, setReservas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filtro, setFiltro] = useState('todas'); // 'todas', 'reservado', 'pagado', 'cancelado'
-  const [adminUser, setAdminUser] = useState('');
+  const [filtro, setFiltro] = useState('todas');
   const [stats, setStats] = useState({
     total: 0,
     reservadas: 0,
@@ -20,7 +31,7 @@ export default function PanelAdmin() {
   const cargarReservas = async () => {
     try {
       setLoading(true);
-      const { obtenerReservasAdmin, obtenerEstadisticas } = await import('@/lib/database-nonstop');
+      const { obtenerReservasAdmin } = await import('@/lib/database-nonstop');
       
       const data = await obtenerReservasAdmin();
       setReservas(data || []);
@@ -47,26 +58,22 @@ export default function PanelAdmin() {
     }
   };
 
+  // useEffect - solo cargar si está autenticado
   useEffect(() => {
-    cargarReservas();
-    
-    // Recargar cada 30 segundos
-    const interval = setInterval(cargarReservas, 30000);
-    return () => clearInterval(interval);
-  }, []);
+    if (autenticado) {
+      cargarReservas();
+      const interval = setInterval(cargarReservas, 30000);
+      return () => clearInterval(interval);
+    }
+  }, [autenticado]);
 
   // Confirmar pago
   const confirmarPago = async (codigoDeposito) => {
-    if (!adminUser.trim()) {
-      alert('Por favor ingresa tu nombre de usuario admin');
-      return;
-    }
-
     if (!confirm('¿Confirmar que el pago fue recibido?')) return;
 
     try {
       const { confirmarPago: confirmarPagoFn } = await import('@/lib/database-nonstop');
-      const resultado = await confirmarPagoFn(codigoDeposito, adminUser);
+      const resultado = await confirmarPagoFn(codigoDeposito, usuarioActual);
       
       if (resultado.success) {
         alert('✅ Pago confirmado exitosamente');
@@ -118,13 +125,22 @@ export default function PanelAdmin() {
     });
   };
 
+  // ✅ AHORA SÍ: Return condicional DESPUÉS de todos los hooks
+  if (!autenticado) {
+    return <PantallaLogin onLogin={(username) => {
+      setAutenticado(true);
+      setUsuarioActual(username);
+    }} />;
+  }
+
+  // Render del panel admin
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       
       {/* Header */}
       <header className="bg-black/50 backdrop-blur-sm border-b border-white/10 sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
               <h1 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">
                 Panel de Administración
@@ -133,14 +149,10 @@ export default function PanelAdmin() {
             </div>
             
             <div className="flex items-center gap-4">
-              {/* Input de usuario admin */}
-              <input
-                type="text"
-                placeholder="Tu nombre de admin"
-                value={adminUser}
-                onChange={(e) => setAdminUser(e.target.value)}
-                className="bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:border-yellow-400"
-              />
+              <div className="bg-white/10 border border-white/20 rounded-lg px-4 py-2">
+                <p className="text-gray-400 text-sm">Sesión:</p>
+                <p className="text-white font-bold">{usuarioActual}</p>
+              </div>
               
               <button
                 onClick={cargarReservas}
@@ -148,6 +160,18 @@ export default function PanelAdmin() {
                 title="Recargar"
               >
                 <RefreshCw size={20} />
+              </button>
+              
+              <button
+                onClick={() => {
+                  if (confirm('¿Cerrar sesión?')) {
+                    setAutenticado(false);
+                    setUsuarioActual('');
+                  }
+                }}
+                className="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-4 py-2 rounded-lg transition-all font-bold"
+              >
+                Cerrar Sesión
               </button>
             </div>
           </div>
@@ -201,7 +225,7 @@ export default function PanelAdmin() {
 
         {/* Filtros */}
         <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-4 mb-6">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 flex-wrap">
             <Filter size={20} className="text-gray-400" />
             <button
               onClick={() => setFiltro('todas')}
@@ -275,7 +299,126 @@ export default function PanelAdmin() {
   );
 }
 
-// Componente individual de reserva
+// ============================================
+// COMPONENTE DE LOGIN
+// ============================================
+function PantallaLogin({ onLogin }) {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    const usuarioValido = ADMIN_CREDENTIALS.find(
+      cred => cred.username === username && cred.password === password
+    );
+
+    if (usuarioValido) {
+      setTimeout(() => {
+        onLogin(username);
+      }, 500);
+    } else {
+      setLoading(false);
+      setError('Usuario o contraseña incorrectos');
+      setPassword('');
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
+      <div className="max-w-md w-full">
+        <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-8 shadow-2xl">
+          <div className="text-center mb-8">
+            <div className="w-20 h-20 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Lock size={40} className="text-white" />
+            </div>
+            <h1 className="text-3xl font-black text-white mb-2">
+              Panel de Administración
+            </h1>
+            <p className="text-gray-400">Non Stop Madness</p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="block text-white font-bold mb-2">Usuario</label>
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="w-full bg-white/10 border-2 border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-yellow-400 transition-all"
+                placeholder="Ingresa tu usuario"
+                required
+                autoFocus
+              />
+            </div>
+
+            <div>
+              <label className="block text-white font-bold mb-2">Contraseña</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full bg-white/10 border-2 border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-yellow-400 transition-all"
+                placeholder="Ingresa tu contraseña"
+                required
+              />
+            </div>
+
+            {error && (
+              <div className="bg-red-500/20 border-2 border-red-500 rounded-xl p-4 text-red-400 font-bold text-center">
+                {error}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              className={`w-full bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-black py-4 rounded-xl transition-all ${
+                loading 
+                  ? 'opacity-50 cursor-not-allowed' 
+                  : 'hover:from-yellow-500 hover:to-orange-600 hover:scale-105'
+              }`}
+            >
+              {loading ? (
+                <div className="flex items-center justify-center gap-2">
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                  Verificando...
+                </div>
+              ) : (
+                'INICIAR SESIÓN'
+              )}
+            </button>
+          </form>
+
+          <div className="mt-6 text-center">
+            <p className="text-gray-500 text-sm">
+              ¿Olvidaste tu contraseña? Contacta al administrador principal
+            </p>
+          </div>
+        </div>
+
+        {process.env.NODE_ENV === 'development' && (
+          <div className="mt-4 bg-blue-500/10 border border-blue-500/30 rounded-xl p-4">
+            <p className="text-blue-400 text-sm font-bold mb-2">👨‍💻 Usuarios de prueba:</p>
+            <div className="text-blue-300 text-xs space-y-1 font-mono">
+              {ADMIN_CREDENTIALS.map(cred => (
+                <div key={cred.username}>• {cred.username} / {cred.password}</div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ============================================
+// COMPONENTE INDIVIDUAL DE RESERVA
+// ============================================
 function ReservaCard({ reserva, onConfirmar, onCancelar, formatFecha }) {
   const [mostrarDetalle, setMostrarDetalle] = useState(false);
 
@@ -302,7 +445,7 @@ function ReservaCard({ reserva, onConfirmar, onCancelar, formatFecha }) {
       <div className="p-6">
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1">
-            <div className="flex items-center gap-3 mb-2">
+            <div className="flex items-center gap-3 mb-2 flex-wrap">
               <h3 className="text-2xl font-black text-white">{reserva.codigo_deposito}</h3>
               <span className={`px-3 py-1 rounded-full text-sm font-bold border-2 flex items-center gap-2 ${getEstadoColor(reserva.estado)}`}>
                 {getEstadoIcon(reserva.estado)}
@@ -333,59 +476,68 @@ function ReservaCard({ reserva, onConfirmar, onCancelar, formatFecha }) {
           <button
             onClick={() => setMostrarDetalle(!mostrarDetalle)}
             className="ml-4 p-2 bg-white/10 hover:bg-white/20 rounded-lg transition-all"
+            title={mostrarDetalle ? 'Ocultar detalles' : 'Ver detalles'}
           >
             <Eye size={20} className="text-white" />
           </button>
         </div>
 
-        {/* Detalle expandible */}
-        {mostrarDetalle && reserva.pasajeros && (
+        {mostrarDetalle && (
           <div className="mt-4 pt-4 border-t border-white/10">
-            <h4 className="text-white font-bold mb-3">Detalles de Pasajeros:</h4>
-            <div className="grid gap-3">
-              {reserva.pasajeros.map((pasajero, idx) => (
-                <div key={idx} className="bg-white/5 rounded-lg p-3">
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
-                    <div>
-                      <p className="text-gray-400">Asiento</p>
-                      <p className="text-white font-bold">{pasajero.asiento}</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-400">Nombre</p>
-                      <p className="text-white font-bold">{pasajero.nombre_completo}</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-400">CI</p>
-                      <p className="text-white font-bold">{pasajero.carnet_identidad}</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-400">WhatsApp</p>
-                      <p className="text-white font-bold">{pasajero.whatsapp}</p>
+            <h4 className="text-white font-bold mb-3">👥 Detalles de Pasajeros:</h4>
+            
+            {reserva.pasajeros && reserva.pasajeros.length > 0 ? (
+              <div className="grid gap-3">
+                {reserva.pasajeros.map((pasajero, idx) => (
+                  <div key={idx} className="bg-white/5 rounded-lg p-4 border border-white/10">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-sm">
+                      <div>
+                        <p className="text-gray-400 text-xs">Asiento</p>
+                        <p className="text-yellow-400 font-black text-lg">{pasajero.asiento}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-400 text-xs">Nombre</p>
+                        <p className="text-white font-bold">{pasajero.nombre_completo}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-400 text-xs">CI</p>
+                        <p className="text-white font-bold">{pasajero.carnet_identidad}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-400 text-xs">WhatsApp</p>
+                        <p className="text-green-400 font-bold">{pasajero.whatsapp}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-            <div className="mt-3 text-sm">
-              <p className="text-gray-400">Bebida preferida: <span className="text-white font-bold">{reserva.bebida_preferida}</span></p>
+                ))}
+              </div>
+            ) : (
+              <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4 text-yellow-400 text-sm">
+                ⚠️ No se encontraron datos de pasajeros
+              </div>
+            )}
+            
+            <div className="mt-4 bg-purple-500/10 border border-purple-500/30 rounded-lg p-3">
+              <p className="text-purple-300 text-sm">
+                🍹 Bebida: <span className="text-white font-bold uppercase">{reserva.bebida_preferida || 'No especificada'}</span>
+              </p>
             </div>
           </div>
         )}
 
-        {/* Acciones */}
-        <div className="mt-4 flex gap-3">
+        <div className="mt-4 flex gap-3 flex-wrap">
           {reserva.estado === 'reservado' && (
             <>
               <button
                 onClick={() => onConfirmar(reserva.codigo_deposito)}
-                className="flex-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2"
+                className="flex-1 min-w-[200px] bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2"
               >
                 <CheckCircle size={20} />
                 CONFIRMAR PAGO
               </button>
               <button
                 onClick={() => onCancelar(reserva.codigo_deposito)}
-                className="flex-1 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2"
+                className="flex-1 min-w-[200px] bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2"
               >
                 <XCircle size={20} />
                 CANCELAR

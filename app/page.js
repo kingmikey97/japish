@@ -40,6 +40,9 @@ export default function Home() {
     { number: "5+", label: "Años de Experiencia" }
   ];
   
+
+
+  
   return (
     <main className="bg-black">
       
@@ -139,7 +142,87 @@ export default function Home() {
         </div>
         
       </section>
+      {/* Banner Animado Non Stop */}
+<section className="relative py-24 overflow-hidden">
+  {/* Fondo animado */}
+  <div className="absolute inset-0 bg-gradient-to-r from-purple-900 via-pink-900 to-red-900 animate-gradient"></div>
+  
+  {/* Partículas flotantes (opcional) */}
+  <div className="absolute inset-0 opacity-20">
+    {[...Array(20)].map((_, i) => (
+      <div
+        key={i}
+        className="absolute w-2 h-2 bg-yellow-400 rounded-full animate-float"
+        style={{
+          left: `${Math.random() * 100}%`,
+          top: `${Math.random() * 100}%`,
+          animationDelay: `${Math.random() * 5}s`,
+          animationDuration: `${5 + Math.random() * 5}s`
+        }}
+      />
+    ))}
+  </div>
+  
+  {/* Contenido */}
+  <div className="container mx-auto px-6 relative z-10">
+    <div className="text-center">
       
+      {/* Título con efecto neón */}
+      <h2 className="text-7xl md:text-9xl font-black text-white mb-4 drop-shadow-[0_0_30px_rgba(255,255,0,0.5)]">
+        BUSES PARA NONSTOP THE MADNESS
+      </h2>
+      <h3 className="text-5xl md:text-7xl font-black text-yellow-400 mb-8 drop-shadow-[0_0_20px_rgba(255,165,0,0.8)]">
+        VAMONOS A LA MADNESS!!!
+      </h3>
+      
+      {/* Info */}
+      <div className="flex items-center justify-center gap-6 mb-8 flex-wrap">
+        <div className="bg-white/10 backdrop-blur-sm border-2 border-yellow-400 rounded-2xl px-6 py-3">
+          <p className="text-white font-bold text-xl">🚌 La Paz → Cochabamba</p>
+        </div>
+        <div className="bg-white/10 backdrop-blur-sm border-2 border-pink-400 rounded-2xl px-6 py-3">
+          <p className="text-white font-bold text-xl">💰 Bs. 220</p>
+        </div>
+        <div className="bg-white/10 backdrop-blur-sm border-2 border-purple-400 rounded-2xl px-6 py-3">
+          <p className="text-white font-bold text-xl">🍹 Barra libre todo el viaje, escoge tu bebida!!</p>
+        </div>
+      </div>
+      
+      {/* CTA */}
+      <a
+        href="/japish/nonstop"
+        className="inline-block bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 text-white font-black text-3xl px-16 py-8 rounded-3xl hover:scale-110 transition-all shadow-2xl relative overflow-hidden group"
+      >
+        <span className="relative z-10">🎉 RESERVA AHORA 🎉</span>
+        <div className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
+      </a>
+      
+      <p className="text-gray-300 mt-6 text-lg">
+        ⏰ Asientos limitados - ¡No te quedes sin el tuyo!
+      </p>
+      
+    </div>
+  </div>
+</section>
+
+{/* Estilos adicionales para animaciones */}
+<style jsx>{`
+  @keyframes gradient {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient 15s ease infinite;
+  }
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+`}</style>
       {/* ============================================ */}
       {/* SERVICIOS - PREMIUM CARDS */}
       {/* ============================================ */}
@@ -289,6 +372,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+
+      
       
       {/* ============================================ */}
       {/* CTA FINAL */}

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Music, MapPin, Calendar, DollarSign, ArrowRight, Users, Sparkles } from 'lucide-react';
+import MusicPlayer from '@/components/MusicPlayer';
 
 export default function NonStopMadness() {
   const [selectedSeats, setSelectedSeats] = useState([]);
@@ -99,14 +100,14 @@ export default function NonStopMadness() {
             {/* Badge del evento */}
             <div className="inline-flex items-center gap-2 bg-yellow-400 text-purple-900 font-black px-6 py-3 rounded-full mb-4 animate-bounce">
               <Sparkles size={24} />
-              <span className="text-lg">EVENTO EXCLUSIVO</span>
+              <span className="text-lg"> GRUPO PARTICULAR/PRIVADO </span>
               <Sparkles size={24} />
             </div>
             
             {/* Título principal */}
             <h1 className="text-5xl md:text-7xl font-black mb-4">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-pink-300 to-purple-300 animate-pulse">
-                NON STOP MADNESS
+                BUSES PARA LA NONSTOP THE MADNESS
               </span>
             </h1>
             
@@ -118,7 +119,7 @@ export default function NonStopMadness() {
               </div>
               <div className="flex items-center gap-2">
                 <Calendar className="text-pink-400" size={24} />
-                <span className="font-bold">Próximo Evento</span>
+                <span className="font-bold">Salida a las 23:00 pm 13 de FEB</span>
               </div>
               <div className="flex items-center gap-2">
                 <Music className="text-purple-400" size={24} />
@@ -147,7 +148,7 @@ export default function NonStopMadness() {
                 </div>
                 <div>
                   <div className="text-purple-400 font-bold text-sm mb-1">DURACIÓN</div>
-                  <div className="text-white text-2xl font-black">6 horas</div>
+                  <div className="text-white text-2xl font-black">8 horas</div>
                 </div>
                 <div>
                   <div className="text-green-400 font-bold text-sm mb-1">PRECIO</div>
@@ -386,8 +387,11 @@ export default function NonStopMadness() {
           </div>
         )}
         
-      </div>
-      
+    
+      {/* AGREGAR ESTO AL FINAL */}
+      <MusicPlayer />
+    </div>
+  
       {/* Footer */}
       <footer className="border-t-4 border-yellow-400 bg-black/50 backdrop-blur-sm py-6 mt-12">
         <div className="container mx-auto px-4 text-center">

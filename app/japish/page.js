@@ -13,6 +13,8 @@ import CTA from '@/components/Landing/CTA';
 export default function Home() {
   return (
     <main className="bg-slate-900">
+
+      
       <Hero />
       <Features/>
       <HowItWorks/>
