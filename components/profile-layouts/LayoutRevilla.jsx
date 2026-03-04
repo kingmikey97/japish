@@ -113,7 +113,7 @@ export default function LayoutCampañaPolitica({ profileData, handleWhatsApp }) 
         </div>
       </div>
 
-      Propuestas (sin imágenes) 
+      {/* Propuestas (sin imágenes) 
      {propuestas.length > 0 && (
         <div>
           <div className="text-center mb-8">
@@ -145,7 +145,7 @@ export default function LayoutCampañaPolitica({ profileData, handleWhatsApp }) 
           </div>
         </div>
       )}
-      
+      */}
 
       {/* Eventos con fotos (con imágenes) */}
       {eventos.length > 0 && (
