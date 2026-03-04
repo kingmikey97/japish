@@ -104,10 +104,10 @@ export default function Hero() {
               </div>
               
               {/* Helper text */}
-              <p className="text-sm text-gray-400 mt-3 text-left">
+              <p className="text-lg text-gray-400 mt-3 text-left">
                 💡Si quieres ver nuestros DISEÑOS busca: <span className="text-cyan-400 font-semibold">modelo1</span>, <span className="text-cyan-400 font-semibold">modelo2</span>, <span className="text-cyan-400 font-semibold">modelo3</span>, <span className="text-cyan-400 font-semibold">modelo4</span>, <span className="text-cyan-400 font-semibold">modelo5</span>
               </p>
-              <p className="text-sm text-gray-400 mt-3 text-left">
+              <p className="text-lg text-gray-400 mt-3 text-left">
                 💡Si quieres ver como se ven los PLANES busca: <span className="text-cyan-400 font-semibold">demo-basico</span>, <span className="text-cyan-400 font-semibold">demo-pro</span>, o <span className="text-cyan-400 font-semibold">demo-premiun</span>
               </p>
             </form>

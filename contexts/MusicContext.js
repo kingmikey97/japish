@@ -25,7 +25,7 @@ export function MusicProvider({ children }) {
     // Crear el elemento de audio una sola vez
     if (!audioRef.current) {
       audioRef.current = new Audio(PLAYLIST[0].url);
-      audioRef.current.volume = 0.3;
+      audioRef.current.volume = 0.0;
       audioRef.current.loop = false;
       
       // Cuando termine la canción, pasar a la siguiente
@@ -42,7 +42,7 @@ export function MusicProvider({ children }) {
       if (playPromise !== undefined) {
         playPromise
           .then(() => {
-            setIsPlaying(true);
+            setIsPlaying(false);
           })
           .catch(() => {
             // Si el navegador bloquea autoplay, esperamos interacción del usuario
@@ -75,7 +75,7 @@ export function MusicProvider({ children }) {
       setIsPlaying(false);
     } else {
       audioRef.current.play()
-        .then(() => setIsPlaying(true))
+        .then(() => setIsPlaying(false))
         .catch(err => console.log('Error al reproducir:', err));
     }
   };

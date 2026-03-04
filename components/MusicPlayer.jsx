@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Volume2, VolumeX, Music } from 'lucide-react';
@@ -35,4 +36,4 @@ export default function MusicPlayer() {
       )}
     </>
   );
-}
+} 

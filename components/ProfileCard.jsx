@@ -8,6 +8,7 @@ import LayoutModern from './profile-layouts/LayoutModern';
 import LayoutProfessional from './profile-layouts/LayoutProfessional';
 import LayoutElegant from './profile-layouts/LayoutElegant';
 import LayoutPremium from './profile-layouts/LayoutPremium';
+import { getLayoutComponent } from '@/lib/templates';
 
 export default function ProfileCard({ username }) {
   
@@ -191,13 +192,24 @@ useEffect(() => {
 const template = getTemplate(profileData.template_id);
 
 // Seleccionar layout según template
-const LayoutComponent = {
-  1: LayoutBasic,
-  2: LayoutModern,
-  3: LayoutProfessional,
-  4: LayoutElegant,
-  5: LayoutPremium
-}[profileData.template_id] || LayoutModern;
+// ============================================
+// SELECCIONAR LAYOUT
+// ============================================
+
+
+// Primero intentar obtener layout personalizado (templates 100+)
+let LayoutComponent = getLayoutComponent(profileData.template_id);
+
+// Si no hay layout personalizado, usar los layouts básicos (1-5)
+if (!LayoutComponent) {
+  LayoutComponent = {
+    1: LayoutBasic,
+    2: LayoutModern,
+    3: LayoutProfessional,
+    4: LayoutElegant,
+    5: LayoutPremium
+  }[profileData.template_id] || LayoutModern;
+}
 
 return (
   <div className={`min-h-screen bg-gradient-to-br ${template.colors.background} p-4 py-12`}>
