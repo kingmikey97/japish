@@ -222,60 +222,66 @@ return (
       handleWhatsApp={handleWhatsApp}
     />      
       
-      {/* APARTADOS DE SERVICIOS */}
-      {profileData.services && profileData.services.length > 0 && (
-        <div className="space-y-12">
-          {profileData.services.map((section, sectionIdx) => (
-            <div key={sectionIdx}>
+   {/* APARTADOS DE SERVICIOS - Solo para templates 1-5 */}
+{profileData.template_id <= 5 && profileData.services && profileData.services.length > 0 && (
+  <div className="space-y-12">
+    {profileData.services.map((section, sectionIdx) => (
+      <div key={sectionIdx}>
+        
+        {/* Título de sección */}
+        {section.title && (
+          <div className="text-center mb-8">
+            <h2 className={`text-3xl md:text-4xl font-bold ${template.colors.primary} mb-2`}>
+              {section.title}
+            </h2>
+            <div className={`w-24 h-1 bg-gradient-to-r ${template.colors.ringColor} mx-auto rounded-full`}></div>
+          </div>
+        )}
+        
+        {/* Items de la sección (solo si existen) */}
+        {section.items && Array.isArray(section.items) && (
+          <div className="space-y-8">
+            {section.items.map((item, itemIdx) => {
+              const isEven = itemIdx % 2 === 0;
               
-              <div className="text-center mb-8">
-                <h2 className={`text-3xl md:text-4xl font-bold ${template.colors.primary} mb-2`}>
-                  {section.title}
-                </h2>
-                <div className={`w-24 h-1 bg-gradient-to-r ${template.colors.ringColor} mx-auto rounded-full`}></div>
-              </div>
-              
-              <div className="space-y-8">
-                {section.items.map((item, itemIdx) => {
-                  const isEven = itemIdx % 2 === 0;
-                  
-                  return (
-                    <div
-                      key={itemIdx}
-                      className={`${template.colors.card} border ${template.colors.cardBorder} ${template.styles.cardRounded} overflow-hidden hover:bg-white/10 transition-all`}
-                    >
-                      <div className={`grid grid-cols-1 md:grid-cols-2 gap-0 ${isEven ? '' : 'md:grid-flow-dense'}`}>
-                        
-                        <div className={`relative h-64 md:h-full ${isEven ? 'md:col-start-1' : 'md:col-start-2'}`}>
-                          <img
-                            src={item.image}
-                            alt={item.name}
-                            className="w-full h-full object-cover"
-                          />
-                          <div className="absolute top-4 left-4 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-xl flex items-center justify-center text-2xl shadow-lg">
-                            {item.icon}
-                          </div>
-                        </div>
-                        
-                        <div className={`p-8 flex flex-col justify-center ${isEven ? 'md:col-start-2' : 'md:col-start-1'}`}>
-                          <h3 className={`text-2xl font-bold ${template.colors.primary} mb-4`}>
-                            {item.name}
-                          </h3>
-                          <p className={template.colors.secondary + " leading-relaxed"}>
-                            {item.description}
-                          </p>
-                        </div>
-                        
+              return (
+                <div
+                  key={itemIdx}
+                  className={`${template.colors.card} border ${template.colors.cardBorder} ${template.styles.cardRounded} overflow-hidden hover:bg-white/10 transition-all`}
+                >
+                  <div className={`grid grid-cols-1 md:grid-cols-2 gap-0 ${isEven ? '' : 'md:grid-flow-dense'}`}>
+                    
+                    <div className={`relative h-64 md:h-full ${isEven ? 'md:col-start-1' : 'md:col-start-2'}`}>
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute top-4 left-4 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-xl flex items-center justify-center text-2xl shadow-lg">
+                        {item.icon}
                       </div>
                     </div>
-                  );
-                })}
-              </div>
-              
-            </div>
-          ))}
-        </div>
-      )}
+                    
+                    <div className={`p-8 flex flex-col justify-center ${isEven ? 'md:col-start-2' : 'md:col-start-1'}`}>
+                      <h3 className={`text-2xl font-bold ${template.colors.primary} mb-4`}>
+                        {item.name}
+                      </h3>
+                      <p className={template.colors.secondary + " leading-relaxed"}>
+                        {item.description}
+                      </p>
+                    </div>
+                    
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+        
+      </div>
+    ))}
+  </div>
+)}
       
       {/* FOOTER */}
       <div className={`text-center py-8 border-t ${template.colors.cardBorder}`}>

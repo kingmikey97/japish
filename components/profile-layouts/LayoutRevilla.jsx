@@ -1,22 +1,26 @@
 'use client';
 
-import { useState } from 'react';
+
 import { Mail, Phone, MapPin, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useState, useEffect } from 'react';  // ⭐ AGREGAR useEffect
 
-export default function LayoutCampañaPolitica({ profileData, handleWhatsApp }) {
-  // ⭐ CORRECCIÓN: services es un array directo, no tiene section.items
-  const servicios = profileData.services || [];
+export default function LayoutCampañaPolitica({ profileData, template, handleWhatsApp }) {
   
-  // Separar propuestas (sin imagenes) de eventos (con imagenes)
-  const propuestas = servicios.filter(s => !s.imagenes || !Array.isArray(s.imagenes));
-  const eventos = servicios.filter(s => s.imagenes && Array.isArray(s.imagenes));
-
+  // ============================================
+  // PROCESAR SERVICES
+  // ============================================
+  const sections = profileData.services || [];
   
+  // Separar secciones normales (con items) de posts (con imagenes)
+  const seccionesNormales = sections.filter(s => s.items && Array.isArray(s.items));
+  const posts = sections.filter(s => s.imagenes && Array.isArray(s.imagenes));
 
   return (
     <div className="space-y-8">
       
-      {/* Header con foto y datos */}
+      {/* ========================================
+          HEADER CON FOTO Y DATOS
+          ======================================== */}
       <div className="bg-gradient-to-r from-yellow-500 via-yellow-400 to-yellow-600 rounded-3xl p-8 md:p-12 shadow-2xl border-4 border-yellow-300">
         <div className="flex flex-col md:flex-row items-center gap-8">
           
@@ -51,7 +55,9 @@ export default function LayoutCampañaPolitica({ profileData, handleWhatsApp }) 
         </div>
       </div>
 
-      {/* Contacto */}
+      {/* ========================================
+          CONTACTO
+          ======================================== */}
       <div className="bg-white rounded-3xl shadow-2xl p-8 border-4 border-yellow-400">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           
@@ -113,43 +119,75 @@ export default function LayoutCampañaPolitica({ profileData, handleWhatsApp }) 
         </div>
       </div>
 
-      {/* Propuestas (sin imágenes) 
-     {propuestas.length > 0 && (
-        <div>
+      {/* ========================================
+          SECCIONES NORMALES (con items e imagen)
+          Ejemplo: Propuestas, Habitaciones, etc.
+          ======================================== */}
+      {seccionesNormales.map((section, sectionIdx) => (
+        <div key={sectionIdx}>
+          
+          {/* Título de la sección */}
           <div className="text-center mb-8">
             <h2 className="text-4xl md:text-5xl font-black text-white mb-3">
               <span className="bg-gradient-to-r from-yellow-400 to-yellow-500 bg-clip-text text-transparent">
-                Propuestas de Gobierno
+                {section.title}
               </span>
             </h2>
-            <p className="text-gray-300 text-lg">Plan de trabajo para La Paz</p>
+            <div className="w-24 h-1 bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-400 mx-auto rounded-full"></div>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {propuestas.map((propuesta, i) => (
-              <div 
-                key={i}
-                className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all border-4 border-yellow-300 hover:border-yellow-500 group hover:-translate-y-1"
-              >
-                <div className="w-20 h-20 bg-yellow-400 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-md">
-                  <span className="text-4xl">{propuesta.icono || '📋'}</span>
+          {/* Items de la sección */}
+          <div className="space-y-8">
+            {section.items.map((item, itemIdx) => {
+              const isEven = itemIdx % 2 === 0;
+              
+              return (
+                <div
+                  key={itemIdx}
+                  className="bg-white/10 backdrop-blur-lg border-4 border-yellow-400 rounded-3xl overflow-hidden hover:bg-white/20 transition-all shadow-2xl"
+                >
+                  <div className={`grid grid-cols-1 md:grid-cols-2 gap-0 ${isEven ? '' : 'md:grid-flow-dense'}`}>
+                    
+                    {/* Imagen */}
+                    <div className={`relative h-64 md:h-full ${isEven ? 'md:col-start-1' : 'md:col-start-2'}`}>
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-full h-full object-cover"
+                      />
+                      {/* Icono sobre la imagen */}
+                      <div className="absolute top-4 left-4 w-16 h-16 bg-yellow-400 backdrop-blur-sm rounded-2xl flex items-center justify-center text-3xl shadow-lg border-2 border-white">
+                        {item.icon}
+                      </div>
+                    </div>
+                    
+                    {/* Contenido */}
+                    <div className={`p-8 flex flex-col justify-center ${isEven ? 'md:col-start-2' : 'md:col-start-1'}`}>
+                      <h3 className="text-3xl font-black text-white mb-4">
+                        {item.name}
+                      </h3>
+                      <p className="text-gray-200 text-lg leading-relaxed">
+                        {item.description}
+                      </p>
+                    </div>
+                    
+                  </div>
                 </div>
-                <h3 className="text-2xl font-black text-gray-900 mb-3">
-                  {propuesta.titulo}
-                </h3>
-                <p className="text-gray-600 text-base leading-relaxed">
-                  {propuesta.descripcion}
-                </p>
-              </div>
-            ))}
+              );
+            })}
           </div>
+          
         </div>
-      )}
-      */}
+      ))}
 
-      {/* Eventos con fotos (con imágenes) */}
-      {eventos.length > 0 && (
+      {/* ========================================
+          POSTS CON CARRUSEL (con imagenes)
+          Ejemplo: Eventos, Actividades, etc.
+          ======================================== */}
+      {posts.length > 0 && (
         <div className="bg-gradient-to-br from-yellow-100/20 to-orange-100/20 rounded-3xl p-8">
+          
+          {/* Título de eventos */}
           <div className="text-center mb-8">
             <h2 className="text-4xl md:text-5xl font-black text-white mb-3">
               <span className="bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
@@ -159,9 +197,10 @@ export default function LayoutCampañaPolitica({ profileData, handleWhatsApp }) 
             <p className="text-gray-300 text-lg">Recorridos y trabajo en terreno</p>
           </div>
           
+          {/* Posts */}
           <div className="space-y-12">
-            {eventos.map((evento, i) => (
-              <EventoCard key={i} evento={evento} index={i} />
+            {posts.map((post, i) => (
+              <PostCard key={i} post={post} index={i} />
             ))}
           </div>
         </div>
@@ -171,10 +210,26 @@ export default function LayoutCampañaPolitica({ profileData, handleWhatsApp }) 
   );
 }
 
-// Componente de tarjeta de evento con carrusel
-function EventoCard({ evento, index }) {
+// ============================================
+// COMPONENTE: POST CON CARRUSEL
+// ============================================
+// ============================================
+// COMPONENTE: POST CON CARRUSEL
+// ============================================
+function PostCard({ post, index }) {
   const [currentImage, setCurrentImage] = useState(0);
-  const imagenes = evento.imagenes || [];
+  const imagenes = post.imagenes || [];
+  
+  // ⭐ AUTO-PLAY: Cambiar imagen cada 3 segundos
+  useEffect(() => {
+    if (imagenes.length <= 1) return; // No hacer nada si solo hay 1 imagen
+    
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % imagenes.length);
+    }, 3000); // 3000ms = 3 segundos
+    
+    return () => clearInterval(interval); // Limpiar al desmontar
+  }, [imagenes.length]);
   
   const nextImage = () => setCurrentImage((p) => (p + 1) % imagenes.length);
   const prevImage = () => setCurrentImage((p) => (p - 1 + imagenes.length) % imagenes.length);
@@ -190,10 +245,11 @@ function EventoCard({ evento, index }) {
           </div>
           <div className="flex-1">
             <h3 className="text-2xl md:text-4xl font-black text-gray-900 mb-3">
-              {evento.titulo}
+              {post.titulo}
             </h3>
-            <p className="text-base md:text-lg text-gray-700 leading-relaxed">
-              {evento.descripcion}
+            {/* ⭐ TEXTO NEGRO en móvil y desktop */}
+            <p className="text-base md:text-lg text-gray-900 leading-relaxed">
+              {post.descripcion}
             </p>
           </div>
         </div>
@@ -204,7 +260,7 @@ function EventoCard({ evento, index }) {
         <div className="relative bg-gray-900 aspect-video">
           <img
             src={imagenes[currentImage]}
-            alt={`${evento.titulo} - ${currentImage + 1}`}
+            alt={`${post.titulo} - ${currentImage + 1}`}
             className="w-full h-full object-cover"
           />
           
@@ -213,31 +269,36 @@ function EventoCard({ evento, index }) {
           {/* Controles del carrusel */}
           {imagenes.length > 1 && (
             <>
+              {/* ⭐ BOTÓN IZQUIERDO */}
               <button
                 onClick={prevImage}
-                className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 md:w-14 md:h-14 bg-yellow-400 hover:bg-yellow-300 rounded-full flex items-center justify-center shadow-xl transition-all hover:scale-110 z-10"
+                className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 w-10 h-10 md:w-14 md:h-14 bg-yellow-400 hover:bg-yellow-300 rounded-full flex items-center justify-center shadow-xl transition-all hover:scale-110 z-10"
+                aria-label="Foto anterior"
               >
-                <ChevronLeft size={28} className="text-white" />
+                <ChevronLeft size={24} className="text-white md:w-7 md:h-7" />
               </button>
               
+              {/* ⭐ BOTÓN DERECHO */}
               <button
                 onClick={nextImage}
-                className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 md:w-14 md:h-14 bg-yellow-400 hover:bg-yellow-300 rounded-full flex items-center justify-center shadow-xl transition-all hover:scale-110 z-10"
+                className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 w-10 h-10 md:w-14 md:h-14 bg-yellow-400 hover:bg-yellow-300 rounded-full flex items-center justify-center shadow-xl transition-all hover:scale-110 z-10"
+                aria-label="Foto siguiente"
               >
-                <ChevronRight size={28} className="text-white" />
+                <ChevronRight size={24} className="text-white md:w-7 md:h-7" />
               </button>
               
               {/* Indicadores */}
-              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+              <div className="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
                 {imagenes.map((_, i) => (
                   <button
                     key={i}
                     onClick={() => setCurrentImage(i)}
                     className={`rounded-full transition-all ${
                       i === currentImage 
-                        ? 'bg-yellow-400 w-10 h-3' 
-                        : 'bg-white/60 hover:bg-white/90 w-3 h-3'
+                        ? 'bg-yellow-400 w-8 md:w-10 h-2 md:h-3' 
+                        : 'bg-white/60 hover:bg-white/90 w-2 md:w-3 h-2 md:h-3'
                     }`}
+                    aria-label={`Ir a foto ${i + 1}`}
                   />
                 ))}
               </div>
@@ -245,7 +306,7 @@ function EventoCard({ evento, index }) {
           )}
           
           {/* Contador */}
-          <div className="absolute top-4 right-4 bg-black/80 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
+          <div className="absolute top-2 md:top-4 right-2 md:right-4 bg-black/80 text-white px-3 py-1 md:px-4 md:py-2 rounded-full text-xs md:text-sm font-bold shadow-lg">
             📷 {currentImage + 1} / {imagenes.length}
           </div>
         </div>
