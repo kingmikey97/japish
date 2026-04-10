@@ -104,7 +104,7 @@ export default function Pricing() {
               
               {/* CTA Button */}
               <a
-                href={`https://wa.me/TU_NUMERO?text=Hola! Quiero el plan ${plan.name}`}
+                href={`https://wa.me/+59164256727?text=Hola! Quiero el plan ${plan.name}`}
                 className={`block w-full text-center py-3 rounded-xl font-bold mb-8 transition-all ${
                   plan.popular
                     ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white hover:from-cyan-600 hover:to-blue-700 shadow-lg hover:shadow-cyan-500/50'
