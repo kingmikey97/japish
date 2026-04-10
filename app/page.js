@@ -164,19 +164,19 @@ export default function Home() {
   </div>
   
   {/* Contenido */}
-  <div className="container mx-auto px-6 relative z-10">
-    <div className="text-center">
+  {/* <div className="container mx-auto px-6 relative z-10">
+    <div className="text-center"> */}
       
       {/* Título con efecto neón */}
-      <h2 className="text-7xl md:text-9xl font-black text-white mb-4 drop-shadow-[0_0_30px_rgba(255,255,0,0.5)]">
+      {/* <h2 className="text-7xl md:text-9xl font-black text-white mb-4 drop-shadow-[0_0_30px_rgba(255,255,0,0.5)]">
         BUSES PARA NONSTOP THE MADNESS
       </h2>
       <h3 className="text-5xl md:text-7xl font-black text-yellow-400 mb-8 drop-shadow-[0_0_20px_rgba(255,165,0,0.8)]">
         VAMONOS A LA MADNESS!!!
       </h3>
-      
+       */}
       {/* Info */}
-      <div className="flex items-center justify-center gap-6 mb-8 flex-wrap">
+      {/* <div className="flex items-center justify-center gap-6 mb-8 flex-wrap">
         <div className="bg-white/10 backdrop-blur-sm border-2 border-yellow-400 rounded-2xl px-6 py-3">
           <p className="text-white font-bold text-xl">🚌 La Paz → Cochabamba</p>
         </div>
@@ -186,10 +186,10 @@ export default function Home() {
         <div className="bg-white/10 backdrop-blur-sm border-2 border-purple-400 rounded-2xl px-6 py-3">
           <p className="text-white font-bold text-xl">🍹 Barra libre todo el viaje, escoge tu bebida!!</p>
         </div>
-      </div>
+      </div> */}
       
       {/* CTA */}
-      <a
+      {/* <a
         href="/japish/nonstop"
         className="inline-block bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 text-white font-black text-3xl px-16 py-8 rounded-3xl hover:scale-110 transition-all shadow-2xl relative overflow-hidden group"
       >
@@ -202,7 +202,7 @@ export default function Home() {
       </p>
       
     </div>
-  </div>
+  </div> */}
 </section>
 
 {/* Estilos adicionales para animaciones */}
