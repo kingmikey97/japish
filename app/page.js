@@ -1,7 +1,51 @@
 'use client';
 
 import { Shield, Server, Code, ArrowRight, Zap, CheckCircle, Users, Award, TrendingUp } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef} from 'react';
+
+//funcion para animación
+function AnimatedStat({ number, label }) {
+  const [display, setDisplay] = useState('0');
+  const ref = useRef(null);
+  const hasAnimated = useRef(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasAnimated.current) {
+          hasAnimated.current = true;
+          const match = number.match(/^(\d+)(.*)$/);
+          if (!match) { setDisplay(number); return; }
+          const target = parseInt(match[1]);
+          const suffix = match[2];
+          const duration = 1800;
+          const steps = 60;
+          const increment = target / steps;
+          let current = 0;
+          let step = 0;
+          const timer = setInterval(() => {
+            step++;
+            current = Math.min(Math.round(increment * step), target);
+            setDisplay(`${current}${suffix}`);
+            if (current >= target) clearInterval(timer);
+          }, duration / steps);
+        }
+      },
+      { threshold: 0.5 }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [number]);
+
+  return (
+    <div ref={ref} className="text-center">
+      <div className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500 mb-2 tabular-nums">
+        {display}
+      </div>
+      <div className="text-sm text-gray-400">{label}</div>
+    </div>
+  );
+}
 
 export default function Home() {
   const [scrollY, setScrollY] = useState(0);
@@ -13,25 +57,43 @@ export default function Home() {
   }, []);
   
   const servicios = [
-    {
-      icon: Shield,
-      title: "Ciberseguridad",
-      description: "Auditorías de seguridad, pentesting y protección avanzada de infraestructura",
-      features: ["Análisis de vulnerabilidades", "Implementación de firewalls", "Respuesta a incidentes"]
-    },
-    {
-      icon: Server,
-      title: "Infraestructura Tecnologica",
-      description: "Diseño, migración y optimización de arquitecturas o infraestructura tecnologica",
-      features: ["Mejoramiento/implementacion de red wifi o cableada", "Instalaciones Electricas", "Citofonia", "Camaras de seguridad (analogicas y digitales)","Sistemas de alarmas"]
-    },
-    {
-      icon: Code,
-      title: "Desarrollo de Software",
-      description: "Aplicaciones web, móviles y soluciones empresariales a medida",
-      features: ["Apps web escalables", "Desarrollo móvil", "Integración de APIs"]
-    }
-  ];
+  {
+    icon: Shield,
+    title: "Ciberseguridad",
+    description: "Auditorías de seguridad, pentesting y protección avanzada de infraestructura",
+    features: ["Análisis de vulnerabilidades", "Implementación de firewalls", "Respuesta a incidentes"],
+    color: "from-red-500/20 to-red-600/10",
+    border: "hover:border-red-500/30",
+    iconBg: "from-red-500/20 to-red-600/20",
+    iconBorder: "border-red-500/30",
+    iconColor: "text-red-400",
+    glow: "hover:shadow-red-500/10"
+  },
+  {
+    icon: Server,
+    title: "Infraestructura Tecnológica",
+    description: "Diseño, migración y optimización de arquitecturas e infraestructura tecnológica",
+    features: ["Redes Wi-Fi y cableadas", "Cámaras de seguridad", "Sistemas de alarmas y citofonía"],
+    color: "from-amber-500/20 to-amber-600/10",
+    border: "hover:border-amber-500/30",
+    iconBg: "from-amber-500/20 to-amber-600/20",
+    iconBorder: "border-amber-500/30",
+    iconColor: "text-amber-400",
+    glow: "hover:shadow-amber-500/10"
+  },
+  {
+    icon: Code,
+    title: "Desarrollo de Software",
+    description: "Aplicaciones web, móviles y soluciones empresariales a medida",
+    features: ["Apps web escalables", "Desarrollo móvil", "Integración de APIs"],
+    color: "from-blue-500/20 to-blue-600/10",
+    border: "hover:border-blue-500/30",
+    iconBg: "from-blue-500/20 to-blue-600/20",
+    iconBorder: "border-blue-500/30",
+    iconColor: "text-blue-400",
+    glow: "hover:shadow-blue-500/10"
+  }
+];
   
   const stats = [
     { number: "50+", label: "Proyectos Completados" },
@@ -94,7 +156,7 @@ export default function Home() {
             {/* Subtitle */}
             <p className="text-xl md:text-2xl text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed">
               Soluciones tecnológicas empresariales de <span className="text-amber-400 font-semibold">nivel mundial</span>.
-              Desde Servicio tecnico hasta Infraestructura tecnologica.
+              Desde soporte técnico hasta infraestructura tecnológica.
             </p>
             
             {/* CTAs */}
@@ -119,17 +181,10 @@ export default function Home() {
             
             {/* Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-8 border-t border-white/10">
-              {stats.map((stat, index) => (
-                <div key={index} className="text-center">
-                  <div className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500 mb-2">
-                    {stat.number}
-                  </div>
-                  <div className="text-sm text-gray-400">
-                    {stat.label}
-                  </div>
-                </div>
-              ))}
-            </div>
+  {stats.map((stat, index) => (
+    <AnimatedStat key={index} number={stat.number} label={stat.label} />
+  ))}
+</div>
             
           </div>
         </div>
@@ -143,12 +198,12 @@ export default function Home() {
         
       </section>
       {/* Banner Animado Non Stop */}
-<section className="relative py-24 overflow-hidden">
+{/* <section className="relative py-24 overflow-hidden"> */}
   {/* Fondo animado */}
-  <div className="absolute inset-0 bg-gradient-to-r from-purple-900 via-pink-900 to-red-900 animate-gradient"></div>
+  {/* <div className="absolute inset-0 bg-gradient-to-r from-purple-900 via-pink-900 to-red-900 animate-gradient"></div> */}
   
   {/* Partículas flotantes (opcional) */}
-  <div className="absolute inset-0 opacity-20">
+  {/* <div className="absolute inset-0 opacity-20">
     {[...Array(20)].map((_, i) => (
       <div
         key={i}
@@ -161,7 +216,7 @@ export default function Home() {
         }}
       />
     ))}
-  </div>
+  </div> */}
   
   {/* Contenido */}
   {/* <div className="container mx-auto px-6 relative z-10">
@@ -203,7 +258,7 @@ export default function Home() {
       
     </div>
   </div> */}
-</section>
+{/* </section> */}
 
 {/* Estilos adicionales para animaciones */}
 <style jsx>{`
@@ -246,47 +301,47 @@ export default function Home() {
           {/* Services grid */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
             {servicios.map((servicio, index) => {
-              const Icon = servicio.icon;
-              
-              return (
-                <div
-                  key={index}
-                  className="group relative bg-gradient-to-b from-white/5 to-white/[0.02] backdrop-blur-sm border border-white/10 rounded-3xl p-8 hover:border-amber-500/30 transition-all duration-500 hover:shadow-2xl hover:shadow-amber-500/10"
-                >
-                  
-                  {/* Glow effect on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-b from-amber-500/0 to-orange-500/0 group-hover:from-amber-500/5 group-hover:to-orange-500/5 rounded-3xl transition-all duration-500"></div>
-                  
-                  <div className="relative z-10">
-                    {/* Icon */}
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-500/30 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
-                      <Icon size={32} className="text-amber-400" />
-                    </div>
-                    
-                    {/* Title */}
-                    <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-amber-400 transition-colors">
-                      {servicio.title}
-                    </h3>
-                    
-                    {/* Description */}
-                    <p className="text-gray-400 mb-6 leading-relaxed">
-                      {servicio.description}
-                    </p>
-                    
-                    {/* Features list */}
-                    <ul className="space-y-3">
-                      {servicio.features.map((feature, idx) => (
-                        <li key={idx} className="flex items-start gap-3 text-gray-300">
-                          <CheckCircle size={18} className="text-amber-400 flex-shrink-0 mt-0.5" />
-                          <span className="text-sm">{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  
-                </div>
-              );
-            })}
+  const Icon = servicio.icon;
+  return (
+    <div
+      key={index}
+      className={`group relative bg-gradient-to-b from-white/5 to-white/[0.02] backdrop-blur-sm border border-white/10 rounded-3xl p-8 transition-all duration-500 hover:shadow-2xl ${servicio.border} ${servicio.glow}`}
+    >
+      {/* Glow de color único por card */}
+      <div className={`absolute inset-0 bg-gradient-to-b ${servicio.color} opacity-0 group-hover:opacity-100 rounded-3xl transition-all duration-500`}></div>
+
+      {/* Línea superior de color */}
+      <div className={`absolute top-0 left-8 right-8 h-px bg-gradient-to-r ${servicio.iconBg} opacity-0 group-hover:opacity-100 transition-all duration-500`}></div>
+
+      <div className="relative z-10">
+        {/* Icon */}
+        <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${servicio.iconBg} border ${servicio.iconBorder} flex items-center justify-center mb-6 group-hover:scale-110 transition-all duration-500`}>
+          <Icon size={32} className={servicio.iconColor} />
+        </div>
+
+        {/* Title */}
+        <h3 className={`text-2xl font-bold text-white mb-4 group-hover:${servicio.iconColor} transition-colors`}>
+          {servicio.title}
+        </h3>
+
+        {/* Description */}
+        <p className="text-gray-400 mb-6 leading-relaxed text-sm">
+          {servicio.description}
+        </p>
+
+        {/* Features */}
+        <ul className="space-y-3">
+          {servicio.features.map((feature, idx) => (
+            <li key={idx} className="flex items-start gap-3 text-gray-300">
+              <CheckCircle size={16} className={`${servicio.iconColor} flex-shrink-0 mt-0.5`} />
+              <span className="text-sm">{feature}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+})}
           </div>
           
         </div>
@@ -420,7 +475,7 @@ export default function Home() {
               Excelencia tecnológica desde Bolivia para el mundo
             </p>
             <p className="text-sm text-gray-600">
-              © 2025 ValhallaTechnology. Todos los derechos reservados.
+              © {new Date().getFullYear()} ValhallaTechnology. Todos los derechos reservados.
             </p>
           </div>
         </div>
