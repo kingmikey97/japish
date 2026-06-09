@@ -9,6 +9,8 @@ import LayoutProfessional from './profile-layouts/LayoutProfessional';
 import LayoutElegant from './profile-layouts/LayoutElegant';
 import LayoutPremium from './profile-layouts/LayoutPremium';
 import { getLayoutComponent } from '@/lib/templates';
+import EmbedVideo from './EmbedVideo';
+
 
 export default function ProfileCard({ username }) {
   
@@ -240,7 +242,7 @@ return (
         
         {/* Items de la sección (solo si existen) */}
         {section.items && Array.isArray(section.items) && (
-          <div className="space-y-8">
+ <div className="space-y-8">            
             {section.items.map((item, itemIdx) => {
               const isEven = itemIdx % 2 === 0;
               
@@ -251,16 +253,23 @@ return (
                 >
                   <div className={`grid grid-cols-1 md:grid-cols-2 gap-0 ${isEven ? '' : 'md:grid-flow-dense'}`}>
                     
-                    <div className={`relative h-64 md:h-full ${isEven ? 'md:col-start-1' : 'md:col-start-2'}`}>
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        className="w-full h-full object-cover"
-                      />
-                      <div className="absolute top-4 left-4 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-xl flex items-center justify-center text-2xl shadow-lg">
-                        {item.icon}
-                      </div>
-                    </div>
+                   <div className={`relative h-64 md:h-full ${isEven ? 'md:col-start-1' : 'md:col-start-2'}`}>
+  {/* Si tiene videoUrl, mostrar video; si no, mostrar imagen */}
+  {item.videoUrl ? (
+    <div className="w-full h-full">
+      <EmbedVideo url={item.videoUrl} className="w-full h-full object-cover" />
+    </div>
+  ) : (
+    <img
+      src={item.image}
+      alt={item.name}
+      className="w-full h-full object-cover"
+    />
+  )}
+  <div className="absolute top-4 left-4 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-xl flex items-center justify-center text-2xl shadow-lg">
+    {item.icon}
+  </div>
+</div>
                     
                     <div className={`p-8 flex flex-col justify-center ${isEven ? 'md:col-start-2' : 'md:col-start-1'}`}>
                       <h3 className={`text-2xl font-bold ${template.colors.primary} mb-4`}>
