@@ -199,7 +199,7 @@ export default function LayoutCampañaPolitica({ profileData, template, handleWh
 
               </span>
             </h2>
-            <p className="text-gray-500 text-lg">Recorridos y trabajo en terreno</p>
+            <p className="text-gray-500 text-lg">Recorridos y Trabajo en terreno</p>
           </div>
 
           {/* Posts */}
