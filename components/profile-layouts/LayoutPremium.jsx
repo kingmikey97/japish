@@ -38,11 +38,11 @@ export default function LayoutPremium({ profileData, template, handleWhatsApp })
           {/* Foto con efectos */}
           <div className="flex justify-center">
             <div className="relative">
-              <div className="absolute -inset-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full blur-2xl opacity-50 animate-pulse"></div>
+              <div className="absolute -inset-4 bg-gradient-to-r from-green-600 to-pink-600 rounded-full blur-2xl opacity-50 animate-pulse"></div>
               <img 
                 src={profileData.image} 
                 alt={profileData.name}
-                className="relative w-64 h-64 rounded-full object-cover shadow-2xl border-4 border-purple-500/50"
+                className="relative w-64 h-64 rounded-full object-cover shadow-2xl border-4 border-green-500/50"
               />
             </div>
           </div>
