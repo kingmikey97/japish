@@ -1,22 +1,22 @@
 'use client';
 
-import { Phone } from 'lucide-react';
+import { MessageCircle, Phone, Send, SendHorizonal, SendHorizonalIcon } from 'lucide-react';
 
 export default function LayoutModern({ profileData, template, handleWhatsApp }) {
   return (
     <div className="max-w-2xl mx-auto">
       
-      <div className={`${template.colors.card} ${template.styles.cardRounded} ${template.styles.shadow} border ${template.colors.cardBorder} p-8`}>
+      <div className={`${template.colors.card} ${template.styles.cardRounded} ${template.styles.shadow} border ${template.colors.cardBorder} p-5`}>
         
         {/* Foto con anillo animado */}
         <div className="flex justify-center mb-6">
-          <div className="relative w-32 h-32">
+          <div className="relative w-65 h-65">
             <div className={`absolute inset-0 rounded-full bg-gradient-to-r ${template.colors.ringColor} animate-spin [animation-duration:3s]`}></div>
             <div className="absolute inset-1 rounded-full bg-slate-800 overflow-hidden">
               <img 
                 src={profileData.image} 
                 alt={profileData.name}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover "
               />
             </div>
           </div>
@@ -33,7 +33,7 @@ export default function LayoutModern({ profileData, template, handleWhatsApp }) 
             @ {profileData.company}
           </p>
           <p className={template.colors.secondary}>
-            {profileData.specialization}
+            {profileData.especialization}
           </p>
         </div>
 
@@ -47,9 +47,9 @@ export default function LayoutModern({ profileData, template, handleWhatsApp }) 
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`flex items-center justify-center gap-2 ${template.colors.buttonSecondary} py-3 ${template.styles.buttonRounded} ${template.colors.primary} group transition-all hover:scale-105`}
+                className={`flex items-center justify-center gap-2 ${template.colors.buttonSecondary} py-3 rounded-3xl ${template.colors.primary} group transition-all hover:scale-105`}
               >
-                <Icon size={20} className="group-hover:scale-110 transition-transform" />
+                <Icon size={24} className="group-hover:scale-110 transition-transform" />
                 <span className="text-sm">{link.label}</span>
               </a>
             );
@@ -59,9 +59,9 @@ export default function LayoutModern({ profileData, template, handleWhatsApp }) 
         {profileData.whatsapp && (
           <button
             onClick={handleWhatsApp}
-            className={`w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-4 ${template.styles.buttonRounded} shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-2`}
+            className={`w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-4 ${template.styles.buttonRounded} shadow-lg hover:shadow-xl hover:scale-103 transition-all flex items-center justify-center gap-2`}
           >
-            <Phone size={20} />
+            <MessageCircle size={24} />
             Contactar por WhatsApp
           </button>
         )}
