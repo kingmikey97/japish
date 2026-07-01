@@ -1,26 +1,189 @@
 @import "tailwindcss";
 
+/* ===== DESIGN SYSTEM — ValhallaTechnology ===== */
+/* Deep Navy palette — premium, corporativo-tech */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Brand palette — Deep Navy */
+  --blue: #1e3a8f;
+  --blue-dark: #152c6b;
+  --blue-mid: #2a4eb0;
+  --blue-light: #5b7fcf;
+
+  /* Neutrals */
+  --white: #ffffff;
+  --off-white: #f8fafc;
+  --near-black: #020617;
+  --dark-bg: #0f172a;
+  --dark-nav: #0a0f1e;
+
+  /* Text */
+  --gray-text: #64748b;
+  --gray-mid: #94a3b8;
+
+  /* Borders */
+  --border-light: rgba(255, 255, 255, 0.06);
+  --border-mid: rgba(255, 255, 255, 0.12);
+
+  /* Easing curves */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* Shadows */
+  --shadow-card: 0 4px 20px rgba(30, 58, 143, 0.08);
+  --shadow-blue: 0 0 40px rgba(30, 58, 143, 0.15);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@theme {
+  --color-background: var(--white);
+  --color-foreground: var(--near-black);
+  --color-blue: var(--blue);
+  --color-blue-dark: var(--blue-dark);
+  --color-blue-mid: var(--blue-mid);
+  --color-blue-light: var(--blue-light);
+  --color-dark-bg: var(--dark-bg);
+  --color-dark-nav: var(--dark-nav);
+  --color-gray-text: var(--gray-text);
+  --color-gray-mid: var(--gray-mid);
+  --color-off-white: var(--off-white);
+  --font-sans: var(--font-inter);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+
+html {
+  /* Removed scroll-behavior: smooth; as it conflicts with GSAP ScrollTrigger pins and causes flickering */
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter, 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+  background: var(--white);
+  color: var(--near-black);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+/* Hide global scrollbar but keep scroll functionality */
+::-webkit-scrollbar {
+  display: none;
+}
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  overflow-x: hidden;
+}
+
+/* Scrollbar hidden for horizontal scroll tracks */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  scrollbar-width: none;
+}
+
+/* Custom focus styles */
+:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+
+/* Font assignments */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading, var(--font-inter));
+}
+
+/* Button active feedback */
+.btn-press {
+  transition: transform 160ms var(--ease-out);
+}
+.btn-press:active {
+  transform: scale(0.97);
+}
+
+/* ===== HERO ANIMATIONS (pure CSS) ===== */
+
+/* Float animation for decorative SVG elements */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-18px);
+  }
+}
+
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(2deg);
+  }
+}
+
+@keyframes float-reverse {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(14px);
+  }
+}
+
+/* Slide-in from right for headline */
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Fade in up for general content */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: float-slow 8s ease-in-out infinite;
+}
+
+.animate-float-reverse {
+  animation: float-reverse 7s ease-in-out infinite;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.8s var(--ease-out) both;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s var(--ease-out) both;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+/* trigger rebuild */

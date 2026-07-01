@@ -66,14 +66,7 @@ export default function CTA() {
         </div>
       </div>
       
-      {/* Footer bar */}
-      <div className="absolute bottom-0 left-0 right-0 bg-slate-900 py-6">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-gray-400">
-            © 2025 JAPISH by <span className="text-cyan-400 font-semibold">ValhallaTechnology</span>.Todos los derechos reservados.
-          </p>
-        </div>
-      </div>
+    
     </section>
   );
 }
