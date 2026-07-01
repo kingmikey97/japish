@@ -227,7 +227,7 @@ export default function ProfileCard({ username }) {
         />
 
         {/* APARTADOS DE SERVICIOS - Solo para templates 1-5 */}
-        {profileData.template_id <= 10 && profileData.services && profileData.services.length > 0 && (
+        {profileData.template_id <= 99 && profileData.services && profileData.services.length > 0 && (
           <div className="space-y-12">
             {profileData.services.map((section, sectionIdx) => (
               <div key={sectionIdx}>
