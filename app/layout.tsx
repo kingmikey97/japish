@@ -1,21 +1,29 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Plus_Jakarta_Sans, Orbitron } from "next/font/google";
 import "./globals.css";
+import { Navbar } from "@/shared/components/layout/Navbar";
+import { Footer } from "@/shared/components/layout/Footer";
+import { WhatsAppButton } from "@/shared/components/ui/WhatsAppButton";
 import Providers from "@/components/Providers";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-heading",
+  subsets: ["latin"],
+});
+
+const orbitron = Orbitron({
+  variable: "--font-orbitron",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "ValhallaTechnology",
-  description: "Sitio Web de la empresa ValhallaTechnology",
+  title: "ValhallaTechnology | Tecnología Para Todos",
+  description: "Empresa de tecnología boliviana. Soporte técnico, desarrollo de software, infraestructura y consultoría.",
 };
 
 export default function RootLayout({
@@ -24,13 +32,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Providers>
-          {children}
-        </Providers>
+    <html
+      lang="es"
+      className={`${inter.variable} ${plusJakartaSans.variable} ${orbitron.variable} h-full antialiased`}
+    >
+      <body className="min-h-full flex flex-col bg-white text-[var(--near-black)] font-sans overflow-x-hidden selection:bg-[var(--blue)]/30">
+        <Navbar />
+        <main className="flex-1 flex flex-col">
+          <Providers>
+            {children}
+          </Providers>
+        </main>
+        <Footer />
+        <WhatsAppButton />
       </body>
     </html>
   );
