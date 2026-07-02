@@ -230,9 +230,9 @@ export function Navbar() {
         <div className="flex items-center lg:justify-self-end lg:col-start-3">
           {/* CTA de escritorio */}
           <Link
-            href={EMPRESA.enlaces.whatsappBase}
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/japish"
+            //target="_blank"
+            //rel="noopener noreferrer"
             className={cn(
               "hidden lg:flex group relative items-center gap-2 border rounded-full pl-5 pr-[5px] py-[5px] text-[13.5px] font-medium transition-all duration-300 backdrop-blur-md",
               sectionBg
@@ -245,7 +245,8 @@ export function Navbar() {
                 : undefined
             }
           >
-            <span>Contáctanos</span>
+          
+            <span>Japish</span>
             <span className="w-[30px] h-[30px] bg-[var(--blue)] rounded-full flex items-center justify-center transition-transform duration-200 ease-out group-hover:scale-105 group-active:scale-95">
               <ArrowUpRight className="w-3.5 h-3.5 text-white" />
             </span>
