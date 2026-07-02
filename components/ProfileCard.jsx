@@ -1,6 +1,6 @@
 'use client';
 
-import { Linkedin, Github, Mail, Phone, Globe, Video, Instagram, Facebook, Twitter, Youtube, MessageCircle, X, ExternalLink, Search } from 'lucide-react'; import { supabase } from '@/lib/supabase';
+import { Linkedin, Github, Mail, Phone, Globe, Video, Instagram, Facebook, Twitter, Youtube, MessageCircle, X, ExternalLink, Search, FileVideo, MonitorPlay, VideoIcon, ImagePlay, PlaySquareIcon, MapPin } from 'lucide-react'; import { supabase } from '@/lib/supabase';
 import { useState, useEffect } from 'react';
 import { getTemplate } from '@/lib/templates';
 import LayoutBasic from './profile-layouts/LayoutBasic';
@@ -69,12 +69,13 @@ export default function ProfileCard({ username }) {
               case 'github': icon = Github; break;
               case 'email': icon = Mail; break;
               case 'website': icon = Globe; break;
-              case 'tiktok':
-              case 'youtube': icon = Video; break;
+              case 'tiktok': icon = VideoIcon;break;
+              case 'youtube': icon = PlaySquareIcon; break;
               case 'instagram': icon = Instagram; break;
               case 'facebook': icon = Facebook; break;
               case 'twitter': icon = Twitter; break;
               case 'whatsapp': icon = MessageCircle; break;
+              case 'map-pin': icon = MapPin;break;
               default: icon = Globe;
             }
             return { ...link, icon };
@@ -216,7 +217,9 @@ export default function ProfileCard({ username }) {
   }
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br ${template.colors.background} p-4 py-12`}>
+    <>
+      <div className="fixed inset-0 -z-20 bg-slate-950" />
+      <div className={`min-h-screen bg-gradient-to-br ${template.colors.background} p-4 py-12`}>
 
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Renderizar layout específico */}
@@ -227,7 +230,7 @@ export default function ProfileCard({ username }) {
         />
 
         {/* APARTADOS DE SERVICIOS - Solo para templates 1-5 */}
-        {profileData.template_id <= 10 && profileData.services && profileData.services.length > 0 && (
+        {profileData.template_id <= 99 && profileData.services && profileData.services.length > 0 && (
           <div className="space-y-12">
             {profileData.services.map((section, sectionIdx) => (
               <div key={sectionIdx}>
@@ -346,5 +349,6 @@ export default function ProfileCard({ username }) {
       </div>
 
     </div>
+     </>
   );
 }

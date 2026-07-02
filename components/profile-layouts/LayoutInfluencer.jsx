@@ -61,11 +61,11 @@ export default function LayoutInfluencer({ profileData, template, handleWhatsApp
                     className="text-center mb-8"
                     style={{ animation: 'fadeUp 0.5s 0.1s ease both', opacity: 0 }}
                 >
-                    <h1 className="text-3xl font-bold mb-1 gradient-text">
+                    <h1 className="text-3xl font-bold mb-1 gradient-text ">
                         {profileData.name}
                     </h1>
-                    <p className="text-purple-600 text-sm mb-1">{profileData.title}</p>
-                    <p className="text-white text-xs">{profileData.company}</p>
+                    <p className="text-blue-800 text-sm mb-1">{profileData.title}</p>
+                    <p className="text-gray-700 text-xs">{profileData.company}</p>
                 </div>
 
                 {/* Links en grid 2x2 */}
@@ -81,8 +81,8 @@ export default function LayoutInfluencer({ profileData, template, handleWhatsApp
                                 className="link-card flex flex-col items-center gap-2 py-5 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 hover:scale-105 transition-all group"
                                 style={{ animationDelay: `${0.5 + i * 0.28}s` }}
                             >
-                                <Icon size={26} className="text-purple-400 group-hover:scale-110 group-hover:rotate-6 transition-transform" />
-                                <span className="text-xs text-pink-600">{link.label}</span>
+                                <Icon size={26} className="text-blue-600 group-hover:scale-110 group-hover:rotate-6 transition-transform" />
+                                <span className="text-xs text-slate-600">{link.label}</span>
                             </a>
                         );
                     })}

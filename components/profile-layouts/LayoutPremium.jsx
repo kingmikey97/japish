@@ -15,16 +15,19 @@ export default function LayoutPremium({ profileData, template, handleWhatsApp })
       <div className={`${template.colors.card} ${template.styles.cardRounded} ${template.styles.shadow} border ${template.colors.cardBorder} p-12 mb-8 relative overflow-hidden`}>
         
         {/* Background effect */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl">
+        </div>
+        <h1 className={`text-5xl text-center font-bold ${template.colors.primary} mb-4`}>
+              {profileData.name}
+            </h1>
         
         <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           
+          
           {/* Info first */}
           <div>
-            <h1 className={`text-5xl font-bold ${template.colors.primary} mb-4`}>
-              {profileData.name}
-            </h1>
-            <p className={`text-2xl ${template.colors.accent} mb-3`}>
+           
+            <p className={`text-2xl text-justify ${template.colors.accent} mb-3`}>
               {profileData.title}
             </p>
             <p className={`text-xl ${template.colors.accent} font-semibold mb-6`}>
@@ -42,7 +45,7 @@ export default function LayoutPremium({ profileData, template, handleWhatsApp })
               <img 
                 src={profileData.image} 
                 alt={profileData.name}
-                className="relative w-64 h-64 rounded-full object-cover shadow-2xl border-4 border-purple-500/50"
+                className="relative w-65 h-65 rounded-full object-cover shadow-2xl border-4 border-purple-500/50"
               />
             </div>
           </div>

@@ -10,6 +10,14 @@ export default function LayoutProfessional({ profileData, template, handleWhatsA
         from { opacity: 0; transform: translateY(14px); }
         to   { opacity: 1; transform: translateY(0); }
       }
+      @keyframes floatImg {
+        0%, 100% { transform: translateY(0); }
+        50%      { transform: translateY(-10px); }
+      }
+      @keyframes floatShadow {
+        0%, 100% { transform: scaleX(1); opacity: 0.35; }
+        50%      { transform: scaleX(0.75); opacity: 0.15; }
+      }
     `}</style>
       <div className="max-w-5xl mx-auto">
 
@@ -21,12 +29,14 @@ export default function LayoutProfessional({ profileData, template, handleWhatsA
             <div className="md:col-span-3 bg-gradient-to-b from-emerald-900/30 to-teal-900/30 p-8 text-center">
 
               {/* Foto cuadrada */}
-              <div className="mb-6">
+              <div className="mb-6 relative w-full max-w-[210px] mx-auto">
                 <img
                   src={profileData.image}
                   alt={profileData.name}
-                  className="w-65 h-65 rounded-2xl object-cover mx-auto shadow-xl border-4 border-emerald-500/30"
+                  className="w-full aspect-square rounded-2xl object-cover shadow-xl border-4 border-emerald-500/30"
+                  style={{ animation: 'floatImg 3.5s ease-in-out infinite' }}
                 />
+                
               </div>
 
               <h1 className={`text-2xl justify-center font-bold ${template.colors.primary} mb-3`}>
@@ -43,9 +53,7 @@ export default function LayoutProfessional({ profileData, template, handleWhatsA
                     <p className={`text-xs ${template.colors.secondary}`}>
                       {profileData.company}
                     </p>
-                    <p className={`text-xs ${template.colors.secondary}`}>
-                      {profileData.especialization}
-                    </p>
+                    
                   </div>
                   
                 </div>
@@ -53,7 +61,7 @@ export default function LayoutProfessional({ profileData, template, handleWhatsA
                 <div className="flex items-start gap-2">
                   {/* <MapPin size={18} className="text-emerald-400 mt-1" /> */}
                   <p className={`text-sm ${template.colors.secondary}`}>
-                    {profileData.specialization}
+                    {profileData.especialization}
                   </p>
                 </div>
               </div>
@@ -63,7 +71,7 @@ export default function LayoutProfessional({ profileData, template, handleWhatsA
             {/* CONTENIDO PRINCIPAL */}
             <div className="md:col-span-5 p-8">
 
-              <h1 className={`text-xl text-justify font-bold ${template.colors.primary} mb-4`}>
+              <h1 className={`text-xl text-center font-bold ${template.colors.primary} mb-4`}>
                 Conecta conmigo
               </h1>
 
