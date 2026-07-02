@@ -1,6 +1,6 @@
 'use client';
 
-import { MessageCircle, BriefcaseBusinessIcon } from 'lucide-react';
+import { MessageCircle, BriefcaseBusinessIcon, Scale, Gavel, BookOpen, Shield, FileText } from 'lucide-react';
 
 export default function LayoutAbogado({ profileData, template, handleWhatsApp }) {
   return (
@@ -20,27 +20,27 @@ export default function LayoutAbogado({ profileData, template, handleWhatsApp })
 
       <div className="fixed inset-0 -z-10 overflow-hidden bg-gradient-to-b from-stone-950 via-rose-950/80 to-stone-950">
 
-        {/* Partículas doradas flotando */}
-        {[...Array(25)].map((_, i) => {
-          const left = (i * 4.1 + (i % 5) * 3) % 100;
-          const size = 2 + (i % 4);
-          const delay = i * 0.8;
-          const duration = 10 + (i % 7) * 2;
-          const opacity = 0.3 + (i % 3) * 0.2;
+        {/* Íconos legales flotando */}
+        {[Scale, Gavel, BookOpen, Shield, FileText, Scale, Gavel, BookOpen, Shield, FileText, Scale, Gavel].map((Icon, i) => {
+          const left = (i * 8.5 + (i % 4) * 4) % 100;
+          const size = 50 + (i % 3) * 15;
+          const delay = i * 1;
+          const duration = 10 + (i % 5) * 2;
+          const rotate = (i % 2 === 0) ? -15 : 15;
           return (
             <div
-              key={`gold-${i}`}
-              className="absolute rounded-full bg-yellow-400"
+              key={`icon-${i}`}
+              className="absolute text-yellow-400"
               style={{
                 left: `${left}%`,
-                bottom: '-10px',
-                width: `${size}px`,
-                height: `${size}px`,
+                bottom: '-40px',
                 opacity: 0,
-                boxShadow: `0 0 ${size * 2}px ${size}px rgba(234,179,8,${opacity})`,
                 animation: `goldFloat ${duration}s ease-in ${delay}s infinite`,
+                transform: `rotate(${rotate}deg)`,
               }}
-            />
+            >
+              <Icon size={size} strokeWidth={1} />
+            </div>
           );
         })}
 
