@@ -50,7 +50,7 @@ export default function LayoutMedico({ profileData, template, handleWhatsApp }) 
                             xmlns="http://www.w3.org/2000/svg"
                             preserveAspectRatio="none"
                             className="w-full"
-                            style={{ height: '60px' }}
+                            style={{ height: '250px' }}
                         >
                             {/* Patrón ECG × 2 para loop perfecto */}
                             <path

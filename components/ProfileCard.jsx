@@ -1,5 +1,6 @@
 'use client';
 
+// import { useState } from 'react';
 import { Linkedin, Github, Mail, Phone, Globe, Video, Instagram, Facebook, Twitter, Youtube, MessageCircle, X, ExternalLink, Search, FileVideo, MonitorPlay, VideoIcon, ImagePlay, PlaySquareIcon, MapPin } from 'lucide-react'; import { supabase } from '@/lib/supabase';
 import { useState, useEffect } from 'react';
 import { getTemplate } from '@/lib/templates';
@@ -19,6 +20,7 @@ export default function ProfileCard({ username }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showChatBubble, setShowChatBubble] = useState(true);
+  const [lightbox, setLightbox] = useState(null);
 
   useEffect(() => {
     async function fetchProfile() {
@@ -69,13 +71,13 @@ export default function ProfileCard({ username }) {
               case 'github': icon = Github; break;
               case 'email': icon = Mail; break;
               case 'website': icon = Globe; break;
-              case 'tiktok': icon = VideoIcon;break;
+              case 'tiktok': icon = VideoIcon; break;
               case 'youtube': icon = PlaySquareIcon; break;
               case 'instagram': icon = Instagram; break;
               case 'facebook': icon = Facebook; break;
               case 'twitter': icon = Twitter; break;
               case 'whatsapp': icon = MessageCircle; break;
-              case 'map-pin': icon = MapPin;break;
+              case 'map-pin': icon = MapPin; break;
               default: icon = Globe;
             }
             return { ...link, icon };
@@ -215,140 +217,178 @@ export default function ProfileCard({ username }) {
       10: LayoutInfluencer
     }[profileData.template_id] || LayoutModern;
   }
-
+  
   return (
     <>
       <div className="fixed inset-0 -z-20 bg-slate-950" />
       <div className={`min-h-screen bg-gradient-to-br ${template.colors.background} p-4 py-12`}>
 
-      <div className="max-w-4xl mx-auto space-y-8">
-        {/* Renderizar layout específico */}
-        <LayoutComponent
-          profileData={profileData}
-          template={template}
-          handleWhatsApp={handleWhatsApp}
-        />
+        <div className="max-w-4xl mx-auto space-y-8">
+          {/* Renderizar layout específico */}
+          <LayoutComponent
+            profileData={profileData}
+            template={template}
+            handleWhatsApp={handleWhatsApp}
+          />
 
-        {/* APARTADOS DE SERVICIOS - Solo para templates 1-5 */}
-        {profileData.template_id <= 99 && profileData.services && profileData.services.length > 0 && (
-          <div className="space-y-12">
-            {profileData.services.map((section, sectionIdx) => (
-              <div key={sectionIdx}>
+          {/* APARTADOS DE SERVICIOS - Solo para templates 1-5 */}
+          {profileData.template_id <= 99 && profileData.services && profileData.services.length > 0 && (
+            <div className="space-y-12">
+              {profileData.services.map((section, sectionIdx) => (
+                <div key={sectionIdx}>
 
-                {/* Título de sección */}
-                {section.title && (
-                  <div className="text-center mb-8">
-                    <h2 className={`text-3xl md:text-4xl font-bold ${template.colors.primary} mb-2`}>
-                      {section.title}
-                    </h2>
-                    <div className={`w-24 h-1 bg-gradient-to-r ${template.colors.ringColor} mx-auto rounded-full`}></div>
-                  </div>
-                )}
+                  {/* Título de sección */}
+                  {section.title && (
+                    <div className="text-center mb-8">
+                      <h2 className={`text-3xl md:text-4xl font-bold ${template.colors.primary} mb-2`}>
+                        {section.title}
+                      </h2>
+                      <div className={`w-24 h-1 bg-gradient-to-r ${template.colors.ringColor} mx-auto rounded-full`}></div>
+                    </div>
+                  )}
 
-                {/* Items de la sección (solo si existen) */}
-                {section.items && Array.isArray(section.items) && (
-                  <div className="space-y-8">
-                    {section.items.map((item, itemIdx) => {
-                      const isEven = itemIdx % 2 === 0;
+                  {/* Items de la sección (solo si existen) */}
+                  {section.items && Array.isArray(section.items) && (
+                    <div className="space-y-8">
+                      {section.items.map((item, itemIdx) => {
+                        const isEven = itemIdx % 2 === 0;
 
-                      return (
-                        <div
-                          key={itemIdx}
-                          className={`${template.colors.card} border ${template.colors.cardBorder} ${template.styles.cardRounded} overflow-hidden hover:bg-white/10 transition-all`}
-                        >
-                          <div className={`grid grid-cols-1 md:grid-cols-2 gap-0 ${isEven ? '' : 'md:grid-flow-dense'}`}>
+                        return (
+                          <div
+                            key={itemIdx}
+                            className={`${template.colors.card} border ${template.colors.cardBorder} ${template.styles.cardRounded} overflow-hidden hover:bg-white/10 transition-all`}
+                          >
+                            <div className={`grid grid-cols-1 md:grid-cols-2 gap-0 ${isEven ? '' : 'md:grid-flow-dense'}`}>
 
-                            <div className={`relative h-64 md:h-full ${isEven ? 'md:col-start-1' : 'md:col-start-2'}`}>
-                              {/* Si tiene videoUrl, mostrar video; si no, mostrar imagen */}
-                              {item.videoUrl ? (
-                                <div className="w-full h-full">
-                                  <EmbedVideo url={item.videoUrl} className="w-full h-full object-cover" />
+                              <div className={`relative h-64 md:h-full ${isEven ? 'md:col-start-1' : 'md:col-start-2'}`}>
+                                {/* Si tiene videoUrl, mostrar video; si no, mostrar imagen */}
+                                {item.videoUrl ? (
+                                  <div className="w-full h-full">
+                                    <EmbedVideo url={item.videoUrl} className="w-full h-full object-cover" />
+                                  </div>
+                                ) : (
+                                  <img
+                                    src={item.image}
+                                    alt={item.name}
+                                    className="w-full h-full object-cover cursor-zoom-in"
+                                    onClick={() => setLightbox(item.image)}
+                                  />
+                                )}
+                                <div className="absolute top-4 left-4 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-xl flex items-center justify-center text-2xl shadow-lg">
+                                  {item.icon}
                                 </div>
-                              ) : (
-                                <img
-                                  src={item.image}
-                                  alt={item.name}
-                                  className="w-full h-full object-cover"
-                                />
-                              )}
-                              <div className="absolute top-4 left-4 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-xl flex items-center justify-center text-2xl shadow-lg">
-                                {item.icon}
                               </div>
-                            </div>
 
-                            <div className={`p-8 flex flex-col justify-center ${isEven ? 'md:col-start-2' : 'md:col-start-1'}`}>
-                              <h3 className={`text-2xl font-bold ${template.colors.primary} mb-4`}>
-                                {item.name}
-                              </h3>
-                              <p className={template.colors.secondary + " leading-relaxed"}>
+                              <div className={`p-8 flex flex-col justify-center ${isEven ? 'md:col-start-2' : 'md:col-start-1'}`}>
+                                <h3 className={`text-2xl font-bold ${template.colors.primary} mb-4`}>
+                                  {item.name}
+                                </h3>
+                               <p className={template.colors.secondary + " leading-relaxed"}>
                                 {item.description}
                               </p>
+                              {item.downloadable && (
+                                <button
+                                  onClick={async () => {
+                                    try {
+                                      const res = await fetch(item.image);
+                                      const blob = await res.blob();
+                                      const url = URL.createObjectURL(blob);
+                                      const a = document.createElement('a');
+                                      a.href = url;
+                                      a.download = item.name || 'imagen';
+                                      document.body.appendChild(a);
+                                      a.click();
+                                      document.body.removeChild(a);
+                                      URL.revokeObjectURL(url);
+                                    } catch {
+                                      window.open(item.image, '_blank');
+                                    }
+                                  }}
+                                  className={`mt-4 flex items-center justify-center gap-2 w-full bg-gradient-to-r ${template.colors.buttonPrimary} text-white font-semibold py-2 ${template.styles.buttonRounded} transition-all shadow-md text-sm`}
+                                >
+                                  ⬇️ Descargar imagen
+                                </button>
+                              )}
+                              </div>
+
                             </div>
-
                           </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
+                        );
+                      })}
+                    </div>
+                  )}
 
-              </div>
-            ))}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* FOOTER */}
+          <div className={`text-center py-8 border-t ${template.colors.cardBorder}`}>
+            <p className={`text-xs ${template.colors.secondary} mb-2`}>
+              Powered by
+            </p>
+            <a href="/japish" className="inline-block">
+              <span className={`${template.colors.accent} font-bold text-lg hover:opacity-80 transition`}>
+                JAPISH
+              </span>
+            </a>
+            <p className={`text-xs ${template.colors.secondary} mt-1`}>
+              by ValhallaTechnology
+            </p>
           </div>
-        )}
 
-        {/* FOOTER */}
-        <div className={`text-center py-8 border-t ${template.colors.cardBorder}`}>
-          <p className={`text-xs ${template.colors.secondary} mb-2`}>
-            Powered by
-          </p>
-          <a href="/japish" className="inline-block">
-            <span className={`${template.colors.accent} font-bold text-lg hover:opacity-80 transition`}>
-              JAPISH
-            </span>
+        </div>
+
+        {/* FLOATING CHAT BUTTON */}
+        <div className="fixed bottom-6 right-6 z-50">
+
+          {showChatBubble && (
+            <div className="absolute bottom-20 right-0 mb-2 animate-bounce">
+              <div className="relative bg-white rounded-2xl shadow-2xl p-4 max-w-xs">
+                <div className="absolute -bottom-2 right-8 w-4 h-4 bg-white transform rotate-45"></div>
+
+                <div className="relative z-10">
+                  <button
+                    onClick={() => setShowChatBubble(false)}
+                    className="absolute -top-2 -right-2 w-6 h-6 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300 transition"
+                  >
+                    <X size={14} className="text-gray-600" />
+                  </button>
+
+                  <p className="text-slate-900 font-semibold mb-2">
+                    ¿Quieres tu propia tarjeta?
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <a
+            href="/japish"
+            className={`group w-16 h-16 bg-gradient-to-br ${template.colors.buttonPrimary} rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-all hover:shadow-cyan-500/50 border-4 border-white`}
+          >
+            <span className="text-white text-2xl font-bold">si</span>
+            <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full animate-pulse border-2 border-white"></div>
           </a>
-          <p className={`text-xs ${template.colors.secondary} mt-1`}>
-            by ValhallaTechnology
-          </p>
+
         </div>
 
       </div>
-
-      {/* FLOATING CHAT BUTTON */}
-      <div className="fixed bottom-6 right-6 z-50">
-
-        {showChatBubble && (
-          <div className="absolute bottom-20 right-0 mb-2 animate-bounce">
-            <div className="relative bg-white rounded-2xl shadow-2xl p-4 max-w-xs">
-              <div className="absolute -bottom-2 right-8 w-4 h-4 bg-white transform rotate-45"></div>
-
-              <div className="relative z-10">
-                <button
-                  onClick={() => setShowChatBubble(false)}
-                  className="absolute -top-2 -right-2 w-6 h-6 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300 transition"
-                >
-                  <X size={14} className="text-gray-600" />
-                </button>
-
-                <p className="text-slate-900 font-semibold mb-2">
-                  ¿Quieres tu propia tarjeta?
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        <a
-          href="/japish"
-          className={`group w-16 h-16 bg-gradient-to-br ${template.colors.buttonPrimary} rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-all hover:shadow-cyan-500/50 border-4 border-white`}
+    {/* LIGHTBOX */}
+      {lightbox && (
+        <div
+          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 cursor-zoom-out"
+          onClick={() => setLightbox(null)}
         >
-          <span className="text-white text-2xl font-bold">si</span>
-          <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full animate-pulse border-2 border-white"></div>
-        </a>
-
-      </div>
-
-    </div>
-     </>
+          <img
+            src={lightbox}
+            alt="preview"
+            className="max-w-full max-h-full object-contain rounded-xl shadow-2xl"
+            style={{ animation: 'fadeUp 0.2s ease both' }}
+          />
+        </div>
+      )}
+    </>
   );
 }
