@@ -318,13 +318,11 @@ export function Navbar() {
             }}
           >
             <Link
-              href={EMPRESA.enlaces.whatsappBase}
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/japish"
               onClick={closeMenu}
               className="flex items-center justify-center gap-2 w-full bg-[var(--blue)] text-white py-3.5 rounded-xl text-[15px] font-medium transition-all duration-200 hover:bg-[var(--blue-dark)] active:scale-[0.98]"
             >
-              Contáctanos
+              Japish
               <ArrowUpRight className="w-4 h-4 text-white" />
             </Link>
           </div>
