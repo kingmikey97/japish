@@ -133,7 +133,7 @@ export function ServiciosSection() {
   };
 
   return (
-    <div ref={wrapperRef} className="relative w-full bg-[var(--dark-bg)]" data-nav-bg="var(--dark-bg)">
+    <div ref={wrapperRef} className="relative w-full bg-[var(--near-black)]" data-nav-bg="var(--near-black)">
       <section
         ref={sectionRef}
         id="servicios"
@@ -189,8 +189,8 @@ export function ServiciosSection() {
         </div>
 
         {/* ── Vinetas de desvanecimiento en bordes ── */}
-        <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[var(--dark-bg)] to-transparent z-20 pointer-events-none hidden md:block" />
-        <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-[var(--dark-bg)] to-transparent z-20 pointer-events-none hidden md:block" />
+        <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[var(--near-black)] to-transparent z-20 pointer-events-none hidden md:block" />
+        <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-[var(--near-black)] to-transparent z-20 pointer-events-none hidden md:block" />
       </section>
 
       {/* ── Espaciador entre secciones ── */}

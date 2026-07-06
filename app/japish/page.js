@@ -16,8 +16,9 @@ export default function Home() {
   return (
     <main className="bg-slate-900">      
       <Hero />
+       <HowItWorks/>
       <Features/>
-      <HowItWorks/>
+     
       <Showcase/>
       <Pricing/>
       <CTA/>
