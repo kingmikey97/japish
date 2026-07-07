@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { Servicio } from "../types";
+import { getWhatsAppLink } from "@/shared/utils/whatsapp";
 
 interface ServicioCardProps {
   servicio: Servicio;
@@ -22,8 +22,10 @@ export function ServicioCard({ servicio, index, className = "", style, forwardRe
       style={style}
       className={`group ${className}`}
     >
-      <Link
-        href={`/servicios#${servicio.slug}`}
+      <a
+        href={getWhatsAppLink(servicio.slug)}
+        target="_blank"
+        rel="noopener noreferrer"
         className="servicio-card rounded-2xl p-8 lg:p-10 flex flex-col justify-between min-h-[420px] lg:min-h-[480px] relative overflow-hidden transition-all duration-400 ease-[var(--ease-out)] group-hover:-translate-y-3 group-hover:scale-[1.02] group-hover:shadow-[0_20px_50px_-10px_rgba(0,0,0,0.5)] cursor-pointer will-change-transform focus:outline-none focus-visible:ring-4 focus-visible:ring-white/50"
       >
         {/* Imagen de fondo que ocupa todo el card */}
@@ -64,7 +66,7 @@ export function ServicioCard({ servicio, index, className = "", style, forwardRe
             {servicio.descripcion}
           </p>
         </div>
-      </Link>
+      </a>
     </div>
   );
 }
