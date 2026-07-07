@@ -2,6 +2,14 @@
 
 import { motion } from 'framer-motion';
 import { Zap, RefreshCw, Smartphone, Shield, Globe, Leaf } from 'lucide-react';
+import { DM_Sans } from 'next/font/google';
+
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-dm-sans',
+  display: 'swap',
+});
 
 interface FeatureItem {
   icon: React.ElementType;
@@ -49,14 +57,18 @@ const features: FeatureItem[] = [
   },
 ];
 
-const fadeUp: any = {
+
+const fadeUp = {
   hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const } },
 };
 
 export default function Features() {
   return (
-    <section className="py-24 bg-[var(--near-black)] relative overflow-hidden">
+    <section
+      data-nav-bg="#020617"
+      className={`py-24 bg-[var(--near-black)] relative overflow-hidden ${dmSans.variable}`}
+    >
       <div className="container mx-auto px-6">
         <motion.div
           className="mb-16 text-center lg:text-left flex flex-col items-center lg:items-start"
@@ -65,76 +77,135 @@ export default function Features() {
           viewport={{ once: true, amount: 0.3 }}
           variants={fadeUp}
         >
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tighter text-white leading-[1.1] mb-5">
-            ¿Por qué elegir <span className="text-[var(--blue)]">JAPISH</span>?
+          <h2
+            className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tighter text-white leading-[1.1] mb-5"
+            style={{ fontFamily: 'var(--font-dm-sans)' }}
+          >
+            ¿Por qué elegir{' '}
+            <span className="text-[#3b82f6]">JAPISH</span>?
           </h2>
-          <p className="text-lg text-white/60 font-medium max-w-[55ch]">
-            Tecnología NFC de última generación para profesionales que quieren causar una primera impresión que se recuerde.
+          <p
+            className="text-lg text-slate-400 font-medium max-w-[55ch]"
+            style={{ fontFamily: 'var(--font-dm-sans)' }}
+          >
+            Tecnología NFC de última generación para profesionales que quieren
+            causar una primera impresión que se recuerde.
           </p>
         </motion.div>
 
-        {/* Bento Grid */}
+        {/* Cuadricula Bento */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 auto-rows-fr">
-          {/* Celda grande: Instantáneo */}
+
+          {/* Celda grande: Instantaneo */}
           <motion.div
-            className="lg:col-span-2 lg:row-span-1 rounded-[32px] border border-white/10 bg-white/[0.03] p-8 sm:p-10 flex flex-col justify-between group hover:border-[var(--blue)]/40 hover:bg-white/[0.05] hover:shadow-xl hover:shadow-[var(--blue)]/10 transition-all duration-300"
+            className="lg:col-span-2 lg:row-span-1 rounded-2xl border border-white/[0.06] bg-white/[0.03] p-8 sm:p-10 flex flex-col justify-between group hover:border-[#3b82f6]/30 hover:bg-white/[0.05] transition-all duration-300"
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, amount: 0.2 }}
             variants={fadeUp}
           >
-            <div className="w-14 h-14 rounded-full bg-[var(--blue)]/20 flex items-center justify-center mb-8 group-hover:bg-[var(--blue)]/30 group-hover:scale-110 transition-all duration-300">
-              <Zap size={26} className="text-[var(--blue)]" />
+            <div className="w-12 h-12 rounded-xl bg-[#3b82f6]/15 flex items-center justify-center mb-8 group-hover:bg-[#3b82f6]/25 group-hover:scale-105 transition-all duration-300">
+              <Zap size={24} className="text-[#3b82f6]" />
             </div>
             <div>
-              <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3 tracking-tight">Instantáneo</h3>
-              <p className="text-white/60 text-lg max-w-[45ch] leading-relaxed">
-                Comparte tu información o la de tu empresa en menos de 1 segundo. Solo acerca o escanea tu tarjeta y LISTO!!!.
+              <h3
+                className="text-2xl sm:text-3xl font-bold text-white mb-3 tracking-tight"
+                style={{ fontFamily: 'var(--font-dm-sans)' }}
+              >
+                Instantáneo
+              </h3>
+              <p
+                className="text-slate-400 text-lg max-w-[45ch] leading-relaxed"
+                style={{ fontFamily: 'var(--font-dm-sans)' }}
+              >
+                Comparte tu información profesional en menos de 1 segundo.
+                Acerca la tarjeta, el perfil aparece. Sin fricciones, sin demoras.
               </p>
             </div>
           </motion.div>
 
-          {/* Celda grande: perfil web */}
+          {/* Celda grande: Tu propia pagina web */}
           <motion.div
-            className="lg:col-span-2 lg:row-span-1 rounded-[32px] border border-white/10 bg-white/[0.03] p-8 sm:p-10 flex flex-col justify-between group hover:border-[var(--blue)]/40 hover:bg-white/[0.05] hover:shadow-xl hover:shadow-[var(--blue)]/10 transition-all duration-300 md:order-3 lg:order-none"
+            className="lg:col-span-2 lg:row-span-1 rounded-2xl border border-white/[0.06] bg-white/[0.03] p-8 sm:p-10 flex flex-col justify-between group hover:border-[#3b82f6]/30 hover:bg-white/[0.05] transition-all duration-300 md:order-3 lg:order-none"
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, amount: 0.2 }}
-            variants={{ ...fadeUp, show: { ...fadeUp.show, transition: { ...fadeUp.show.transition, delay: 0.15 } } }}
+              variants={{
+                ...fadeUp,
+                show: {
+                  ...fadeUp.show,
+                  transition: { ...fadeUp.show.transition, delay: 0.15 },
+                },
+              }}
           >
-            <div className="w-14 h-14 rounded-full bg-[var(--blue)]/20 flex items-center justify-center mb-8 group-hover:bg-[var(--blue)]/30 group-hover:scale-110 transition-all duration-300">
-              <Globe size={26} className="text-[var(--blue)]" />
+            <div className="w-12 h-12 rounded-xl bg-[#3b82f6]/15 flex items-center justify-center mb-8 group-hover:bg-[#3b82f6]/25 group-hover:scale-105 transition-all duration-300">
+              <Globe size={24} className="text-[#3b82f6]" />
             </div>
             <div>
-              <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3 tracking-tight">Tu propio perfil web</h3>
-              <p className="text-white/60 text-lg max-w-[45ch] leading-relaxed">
-                Cada tarjeta tiene su URL única, al fin tendras presencia en el mundo profesional digital con tu propia PAGINA WEB. Compártela por cualquier medio.
+              <h3
+                className="text-2xl sm:text-3xl font-bold text-white mb-3 tracking-tight"
+                style={{ fontFamily: 'var(--font-dm-sans)' }}
+              >
+                Tu propia página web
+              </h3>
+              <p
+                className="text-slate-400 text-lg max-w-[45ch] leading-relaxed"
+                style={{ fontFamily: 'var(--font-dm-sans)' }}
+              >
+                Cada tarjeta incluye una URL única y personalizada. Redes,
+                contacto, servicios: todo en un solo lugar accesible desde
+                cualquier dispositivo.
               </p>
             </div>
           </motion.div>
 
-          {/* Celdas pequeñas */}
-          {features.slice(1).filter(f => f.size === 'small').map((feature, i) => {
-            const Icon = feature.icon;
-            return (
-              <motion.div
-                key={feature.title}
-                className="rounded-[32px] border border-white/10 bg-white/[0.03] p-8 flex flex-col gap-6 group hover:border-[var(--blue)]/40 hover:bg-white/[0.05] hover:shadow-lg hover:shadow-[var(--blue)]/10 transition-all duration-300"
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.2 }}
-                variants={{ ...fadeUp, show: { ...fadeUp.show, transition: { ...fadeUp.show.transition, delay: 0.1 * (i + 1) } } }}
-              >
-                <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-[var(--blue)]/20 group-hover:scale-110 transition-all duration-300">
-                  <Icon size={24} className="text-white/80 group-hover:text-[var(--blue)] transition-colors" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-white mb-2 tracking-tight">{feature.title}</h3>
-                  <p className="text-base text-white/60 leading-relaxed">{feature.description}</p>
-                </div>
-              </motion.div>
-            );
-          })}
+          {/* Celdas pequenas */}
+          {features
+            .slice(1)
+            .filter((f) => f.size === 'small')
+            .map((feature, i) => {
+              const Icon = feature.icon;
+              return (
+                <motion.div
+                  key={feature.title}
+                  className="rounded-2xl border border-white/[0.06] bg-white/[0.03] p-8 flex flex-col gap-6 group hover:border-[#3b82f6]/30 hover:bg-white/[0.05] transition-all duration-300"
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true, amount: 0.2 }}
+                  variants={{
+                    ...fadeUp,
+                    show: {
+                      ...fadeUp.show,
+                      transition: {
+                        ...fadeUp.show.transition,
+                        delay: 0.08 * (i + 1),
+                      },
+                    },
+                  }}
+                >
+                  <div className="w-11 h-11 rounded-xl bg-white/[0.06] flex items-center justify-center group-hover:bg-[#3b82f6]/15 group-hover:scale-105 transition-all duration-300">
+                    <Icon
+                      size={22}
+                      className="text-slate-400 group-hover:text-[#3b82f6] transition-colors duration-300"
+                    />
+                  </div>
+                  <div>
+                    <h3
+                      className="text-xl font-bold text-white mb-2 tracking-tight"
+                      style={{ fontFamily: 'var(--font-dm-sans)' }}
+                    >
+                      {feature.title}
+                    </h3>
+                    <p
+                      className="text-base text-slate-400 leading-relaxed"
+                      style={{ fontFamily: 'var(--font-dm-sans)' }}
+                    >
+                      {feature.description}
+                    </p>
+                  </div>
+                </motion.div>
+              );
+            })}
         </div>
       </div>
     </section>

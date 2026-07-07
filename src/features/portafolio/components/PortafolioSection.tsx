@@ -1,10 +1,11 @@
 "use client";
 
 import { useRef } from "react";
+import { Pointer } from "lucide-react";
 import { useReducedMotion, motion, useScroll, useTransform } from "framer-motion";
 import { portafolio } from "../data/portafolio";
 import { ProyectoCard } from "./ProyectoCard";
-import { div } from "framer-motion/client";
+
 
 const DISPLAY_COUNT = 4;
 
@@ -33,7 +34,7 @@ export function PortafolioSection() {
   return (
     <section
       ref={sectionRef}
-      className="w-full bg-white py-24 lg:py-32 overflow-hidden"
+      className="w-full bg-white py-24 lg:py-32 overflow-hidden relative"
       id="portafolio"
     >
       <motion.div
@@ -63,11 +64,32 @@ export function PortafolioSection() {
         >*/}
           <div className="flex justify-center">
             {featured.map((proyecto)=>(
-              <div key={proyecto.id} className="w-full max-w-[800px]">
+              <div key={proyecto.id} className="w-full max-w-[800px] relative">
                 <ProyectoCard proyecto={proyecto} size="lg"/>
+
               </div>
             ))}
           </div>
+
+          {!reduce && (
+            <motion.div
+              className="flex justify-center mt-8 pointer-events-none"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false }}
+              transition={{ delay: 1.5, duration: 0.6 }}
+            >
+              <motion.div
+                className="flex items-center gap-2.5 text-gray-400"
+                animate={{ y: [0, -4, 0] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <Pointer className="w-7 h-7" />
+                <span className="text-[15px] font-semibold tracking-wider">Toca aquí</span>
+              </motion.div>
+            </motion.div>
+          )}
+
           {/*{featured.map((proyecto, i) => {
             const layout = BENTO_LAYOUT[i];
             const entrance = [
