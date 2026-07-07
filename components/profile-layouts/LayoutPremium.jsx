@@ -1,12 +1,10 @@
 'use client';
 
-import { Phone } from 'lucide-react';
+import { Phone, MessageCircle } from 'lucide-react';
 
 // Este layout será la base, pero en producción lo personalizas 100% con el cliente
 export default function LayoutPremium({ profileData, template, handleWhatsApp }) {
 
-  // NOTA: Para clientes premium, este componente se duplica y personaliza
-  // Cada cliente premium tiene su propio archivo: LayoutPremium_{username}.jsx
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -39,11 +37,11 @@ export default function LayoutPremium({ profileData, template, handleWhatsApp })
           {/* Foto con efectos */}
           <div className="flex justify-center">
             <div className="relative">
-              <div className="absolute -inset-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full blur-2xl opacity-50 animate-pulse"></div>
+             <div className={`absolute -inset-4 bg-gradient-to-r ${template.colors.buttonPrimary} rounded-full blur-2xl opacity-50 animate-pulse`}></div>
               <img
                 src={profileData.image}
                 alt={profileData.name}
-                className="relative w-65 h-65 object-cover shadow-2xl border-4 border-purple-500/50"
+                className={`relative w-65 h-65 object-cover border-4 ${template.colors.accent.replace('text-', 'border-')}/50`}
                 style={{ borderRadius: '999px 999px 0 0' }}
               />
             </div>
@@ -75,12 +73,12 @@ export default function LayoutPremium({ profileData, template, handleWhatsApp })
       {/* WhatsApp destacado */}
       {profileData.whatsapp && (
         <button
-          onClick={handleWhatsApp}
-          className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-6 rounded-2xl flex items-center justify-center gap-3 transition-all shadow-2xl hover:shadow-purple-900/50 text-xl"
-        >
-          <Phone size={24} />
-          Conectar por WhatsApp
-        </button>
+            onClick={handleWhatsApp}
+            className={`w-full bg-gradient-to-r ${template.colors.buttonPrimary} text-white font-bold py-3 px-4 rounded-3xl flex items-center justify-center gap-2 transition-all`}
+          >
+            <MessageCircle size={22} className="mb-1"/>
+            Contactar por WhatsApp
+          </button>
       )}
 
     </div>

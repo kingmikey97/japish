@@ -4,6 +4,7 @@
 import { Linkedin, Github, Mail, Phone, Globe, Video, Instagram, Facebook, Twitter, Youtube, MessageCircle, X, ExternalLink, Search, FileVideo, MonitorPlay, VideoIcon, ImagePlay, PlaySquareIcon, MapPin } from 'lucide-react'; import { supabase } from '@/lib/supabase';
 import { useState, useEffect } from 'react';
 import { getTemplate } from '@/lib/templates';
+import { getColorOverride } from '@/lib/colorMap';
 import LayoutBasic from './profile-layouts/LayoutBasic';
 import LayoutModern from './profile-layouts/LayoutModern';
 import LayoutProfessional from './profile-layouts/LayoutProfessional';
@@ -86,8 +87,6 @@ export default function ProfileCard({ username }) {
 
         setProfileData(data);
         setLoading(false);
-
-        const template = getTemplate(data.template_id);
 
       } catch (err) {
         // Error inesperado (red, timeout, etc)
@@ -195,13 +194,29 @@ export default function ProfileCard({ username }) {
   // ============================================
   // CARGAR TEMPLATE
   // ============================================
-  const template = getTemplate(profileData.template_id);
+  const baseTemplate = getTemplate(profileData.template_id);
 
-  // Seleccionar layout según template
-  // ============================================
-  // SELECCIONAR LAYOUT
-  // ============================================
+  // Si el perfil es template 1-5 y tiene bg_color_id, sobreescribimos
+  // fondo, botón principal y accent — el resto del template queda igual
+  const colorOverride =
+    profileData.template_id <= 5 ? getColorOverride(profileData.bg_color_id) : null;
 
+  const template = colorOverride
+    ? {
+        ...baseTemplate,
+        colors: {
+          ...baseTemplate.colors,
+          background: colorOverride.background,
+          card: colorOverride.card,
+          cardBorder: colorOverride.cardBorder,
+          secondary: colorOverride.secondary,
+          accent: colorOverride.accent,
+          buttonPrimary: colorOverride.buttonPrimary,
+          buttonSecondary: colorOverride.buttonSecondary,
+          ringColor: colorOverride.ringColor
+        }
+      }
+    : baseTemplate;
 
   // Primero intentar obtener layout personalizado (templates 100+)
   let LayoutComponent = getLayoutComponent(profileData.template_id);
@@ -217,11 +232,11 @@ export default function ProfileCard({ username }) {
       10: LayoutInfluencer
     }[profileData.template_id] || LayoutModern;
   }
-  
+
   return (
     <>
       <div className="fixed inset-0 -z-20 bg-slate-950" />
-      <div className={`min-h-screen bg-gradient-to-br ${template.colors.background} p-4 py-12`}>
+      <div className={`min-h-screen ${profileData.template_id <= 5 ? `bg-gradient-to-br ${template.colors.background}` : ''} p-4 py-12`}>
 
         <div className="max-w-4xl mx-auto space-y-8">
           {/* Renderizar layout específico */}
@@ -233,7 +248,7 @@ export default function ProfileCard({ username }) {
 
           {/* APARTADOS DE SERVICIOS - Solo para templates 1-5 */}
           {profileData.template_id <= 99 && profileData.services && profileData.services.length > 0 && (
-            <div className="space-y-12">
+            <div className="space-y-7">
               {profileData.services.map((section, sectionIdx) => (
                 <div key={sectionIdx}>
 
@@ -248,7 +263,67 @@ export default function ProfileCard({ username }) {
                   )}
 
                   {/* Items de la sección (solo si existen) */}
-                  {section.items && Array.isArray(section.items) && (
+
+                  {section.items && Array.isArray(section.items) && section.layout === 'grid' && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                      {section.items.map((item, itemIdx) => (
+                        <div
+                          key={itemIdx}
+                          className={`${template.colors.card} border ${template.colors.cardBorder} ${template.styles.cardRounded} overflow-hidden hover:bg-white/10 transition-all flex flex-col`}
+                        >
+                          <div className="relative h-48">
+                            <img
+                              src={item.image}
+                              alt={item.name}
+                              className="w-full h-full object-cover cursor-zoom-in"
+                              onClick={() => setLightbox(item.image)}
+                            />
+                            {item.badges && item.badges.length > 0 && (
+                              <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-2 px-2">
+                                {item.badges.map((badge, i) => (
+                                  <span
+                                    key={i}
+                                    className="bg-black/70 backdrop-blur-sm text-white text-[10px] px-2 py-1 rounded-lg text-center leading-tight"
+                                  >
+                                    {badge}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
+                            {item.tag && (
+                              <span className="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded">
+                                {item.tag}
+                              </span>
+                            )}
+                          </div>
+
+                          <div className="p-4 flex flex-col flex-1">
+                            <h3 className={`text-sm font-semibold ${template.colors.primary} mb-3 flex-1`}>
+                              {item.name}
+                            </h3>
+                            <div className="flex items-center justify-between">
+                              <div>
+                                {item.oldPrice && (
+                                  <p className="text-xs line-through opacity-50">
+                                    BS. {item.oldPrice.toLocaleString()}
+                                  </p>
+                                )}
+                                <p className={`font-bold ${template.colors.accent}`}>
+                                  BS. {item.price?.toLocaleString()}
+                                </p>
+                              </div>
+                              {/* <div className={`w-10 h-10 rounded-full bg-gradient-to-r ${template.colors.buttonPrimary} flex items-center justify-center`}>
+                                <ExternalLink size={16} className="text-white" />
+                              </div> */}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Items en modo fila (comportamiento original, sin layout: grid) */}
+                  {section.items && Array.isArray(section.items) && section.layout !== 'grid' && (
                     <div className="space-y-8">
                       {section.items.map((item, itemIdx) => {
                         const isEven = itemIdx % 2 === 0;
@@ -274,7 +349,7 @@ export default function ProfileCard({ username }) {
                                     onClick={() => setLightbox(item.image)}
                                   />
                                 )}
-                                <div className="absolute top-4 left-4 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-xl flex items-center justify-center text-2xl shadow-lg">
+                                <div className="absolute top-4 left-4 w-12 h-12 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center text-2xl shadow-lg">
                                   {item.icon}
                                 </div>
                               </div>
@@ -283,32 +358,32 @@ export default function ProfileCard({ username }) {
                                 <h3 className={`text-2xl font-bold ${template.colors.primary} mb-4`}>
                                   {item.name}
                                 </h3>
-                               <p className={template.colors.secondary + " leading-relaxed"}>
-                                {item.description}
-                              </p>
-                              {item.downloadable && (
-                                <button
-                                  onClick={async () => {
-                                    try {
-                                      const res = await fetch(item.image);
-                                      const blob = await res.blob();
-                                      const url = URL.createObjectURL(blob);
-                                      const a = document.createElement('a');
-                                      a.href = url;
-                                      a.download = item.name || 'imagen';
-                                      document.body.appendChild(a);
-                                      a.click();
-                                      document.body.removeChild(a);
-                                      URL.revokeObjectURL(url);
-                                    } catch {
-                                      window.open(item.image, '_blank');
-                                    }
-                                  }}
-                                  className={`mt-4 flex items-center justify-center gap-2 w-full bg-gradient-to-r ${template.colors.buttonPrimary} text-white font-semibold py-2 ${template.styles.buttonRounded} transition-all shadow-md text-sm`}
-                                >
-                                  ⬇️ Descargar imagen
-                                </button>
-                              )}
+                                <p className={template.colors.secondary + " leading-relaxed"}>
+                                  {item.description}
+                                </p>
+                                {item.downloadable && (
+                                  <button
+                                    onClick={async () => {
+                                      try {
+                                        const res = await fetch(item.image);
+                                        const blob = await res.blob();
+                                        const url = URL.createObjectURL(blob);
+                                        const a = document.createElement('a');
+                                        a.href = url;
+                                        a.download = item.name || 'imagen';
+                                        document.body.appendChild(a);
+                                        a.click();
+                                        document.body.removeChild(a);
+                                        URL.revokeObjectURL(url);
+                                      } catch {
+                                        window.open(item.image, '_blank');
+                                      }
+                                    }}
+                                    className={`mt-4 flex items-center justify-center gap-2 w-full bg-gradient-to-r ${template.colors.buttonPrimary} text-white font-semibold py-2 ${template.styles.buttonRounded} transition-all shadow-md text-sm`}
+                                  >
+                                    ⬇️ Descargar imagen
+                                  </button>
+                                )}
                               </div>
 
                             </div>
@@ -375,7 +450,7 @@ export default function ProfileCard({ username }) {
         </div>
 
       </div>
-    {/* LIGHTBOX */}
+      {/* LIGHTBOX */}
       {lightbox && (
         <div
           className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 cursor-zoom-out"

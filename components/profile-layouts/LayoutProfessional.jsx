@@ -33,10 +33,9 @@ export default function LayoutProfessional({ profileData, template, handleWhatsA
                 <img
                   src={profileData.image}
                   alt={profileData.name}
-                  className="w-full aspect-square rounded-2xl object-cover shadow-xl border-4 border-emerald-500/30"
+                  className="w-full aspect-square rounded-2xl object-cover shadow-xl"
                   style={{ animation: 'floatImg 3.5s ease-in-out infinite' }}
                 />
-                
               </div>
 
               <h1 className={`text-2xl justify-center font-bold ${template.colors.primary} mb-3`}>
@@ -45,19 +44,13 @@ export default function LayoutProfessional({ profileData, template, handleWhatsA
 
               <div className="space-y-3 text-left">
                 <div className="flex items-start gap-2">
-                  <BriefcaseBusinessIcon size={28} className="text-emerald-400 mt-1" />
+                  {/* <BriefcaseBusinessIcon size={28} className="text-emerald-400 mt-1" /> */}
                   <div>
                     <p className={`text-sm ${template.colors.accent} font-semibold`}>
-                      {profileData.title}
+                      {profileData.title} / {profileData.company}
                     </p>
-                    <p className={`text-xs ${template.colors.secondary}`}>
-                      {profileData.company}
-                    </p>
-                    
                   </div>
-                  
                 </div>
-
                 <div className="flex items-start gap-2">
                   {/* <MapPin size={18} className="text-emerald-400 mt-1" /> */}
                   <p className={`text-sm ${template.colors.secondary}`}>
@@ -104,9 +97,9 @@ export default function LayoutProfessional({ profileData, template, handleWhatsA
               {profileData.whatsapp && (
                 <button
                   onClick={handleWhatsApp}
-                  className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg"
+                  className={`w-full bg-gradient-to-r ${template.colors.buttonPrimary} text-white font-bold py-3 px-4 rounded-3xl flex items-center justify-center gap-2 transition-all`}
                 >
-                  <MessageCircle size={20} />
+                  <MessageCircle size={22} className="mb-1" />
                   Contactar por WhatsApp
                 </button>
               )}

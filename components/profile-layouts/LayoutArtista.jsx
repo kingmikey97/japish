@@ -1,8 +1,33 @@
 'use client';
 
-import { MessageCircle } from 'lucide-react';
+import { MessageCircle, UserPlus } from 'lucide-react';
 
 export default function LayoutArtista({ profileData, template, handleWhatsApp }) {
+
+  const handleSaveContact = () => {
+    
+
+    const vCard = [
+      'BEGIN:VCARD',
+      'VERSION:3.0',
+      `FN:${profileData.name || ''}`,
+      profileData.company ? `ORG:${profileData.company}` : '',
+      profileData.whatsapp ? `TEL;TYPE=CELL:${profileData.whatsapp}` : '',
+      
+      'END:VCARD'
+    ].filter(Boolean).join('\n');
+
+    const blob = new Blob([vCard], { type: 'text/vcard' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${profileData.name || 'contacto'}.vcf`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <>
       <style>{`
@@ -20,8 +45,8 @@ export default function LayoutArtista({ profileData, template, handleWhatsApp })
         }
         @keyframes bokeh {
           0%   { transform: translateY(20px) scale(1); opacity: 0; }
-          15%  { opacity: 0.7; }
-          85%  { opacity: 0.5; }
+          15%  { opacity: 0.9; }
+          85%  { opacity: 0.7; }
           100% { transform: translateY(-60px) scale(1.3); opacity: 0; }
         }
         @keyframes eqBar {
@@ -46,7 +71,7 @@ export default function LayoutArtista({ profileData, template, handleWhatsApp })
               className={`absolute rounded-full ${colors[i % 3]} blur-2xl`}
               style={{
                 left: `${left}%`,
-                top: '0%',
+                top: `${(i * 17 + (i % 4) * 11) % 90}%`,
                 width: `${size}px`,
                 height: `${size}px`,
                 opacity: 0,
@@ -132,6 +157,7 @@ export default function LayoutArtista({ profileData, template, handleWhatsApp })
           </div>
 
           {/* WhatsApp */}
+          {/* WhatsApp */}
           {profileData.whatsapp && (
             <button
               onClick={handleWhatsApp}
@@ -141,6 +167,15 @@ export default function LayoutArtista({ profileData, template, handleWhatsApp })
               Contactar por WhatsApp
             </button>
           )}
+
+          {/* Guardar contacto */}
+          <button
+            onClick={handleSaveContact}
+            className={`w-full mt-3 ${template.colors.buttonSecondary} ${template.colors.primary} font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-all border ${template.colors.cardBorder}`}
+          >
+            <UserPlus size={20} />
+            Guardar contacto
+          </button>
 
         </div>
       </div>
