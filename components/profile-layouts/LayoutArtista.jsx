@@ -37,7 +37,7 @@ export default function LayoutArtista({ profileData, template, handleWhatsApp })
         {[...Array(12)].map((_, i) => {
           const left = (i * 8.3 + (i % 3) * 5) % 100;
           const size = 40 + (i % 4) * 30;
-          const delay = i * 1.3;
+          const delay = i * 1;
           const duration = 8 + (i % 5) * 2;
           const colors = ['bg-cyan-400', 'bg-indigo-400', 'bg-blue-400'];
           return (
@@ -63,8 +63,8 @@ export default function LayoutArtista({ profileData, template, handleWhatsApp })
               key={`eq-${i}`}
               className="flex-1 max-w-[20px] bg-cyan-300 rounded-t-sm origin-bottom"
               style={{
-                height: `${30 + (i % 5) * 15}%`,
-                animation: `eqBar ${0.8 + (i % 4) * 0.3}s ease-in-out ${i * 0.05}s infinite`,
+                height: `${70 + (i % 5) * 45}%`,
+                animation: `eqBar ${0.8 + (i % 2) * 0.3}s ease-in-out ${i * 0.05}s infinite`,
               }}
             />
           ))}
