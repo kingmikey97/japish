@@ -43,7 +43,7 @@ const steps: Step[] = [
   },
 ];
 
-/* Cohesive blue palette gradients */
+/* Degradados de paleta azul cohesiva */
 const gradients = [
   'from-[#2563eb] to-[#3b82f6]',
   'from-[#2563eb] to-[#3b82f6]',
@@ -92,15 +92,15 @@ export default function HowItWorks() {
     <section
       className={`py-24 md:py-32 bg-white relative overflow-hidden ${dmSans.variable}`}
     >
-      {/* Top separator */}
+      {/* Separador superior */}
       <div className="absolute inset-x-0 top-0 h-px bg-slate-200/60" />
-      {/* Bottom separator */}
+      {/* Separador inferior */}
       <div className="absolute inset-x-0 bottom-0 h-px bg-slate-200/60" />
 
       <div className="container mx-auto px-6">
         <div className="flex flex-col lg:flex-row lg:items-center gap-12 lg:gap-16 xl:gap-24">
 
-          {/* LEFT: Header + Step Navigation */}
+          {/* IZQUIERDA: Encabezado + Navegacion de pasos */}
           <motion.div
             className="lg:w-[35%] xl:w-[32%] flex-shrink-0"
             initial={{ opacity: 0, y: 24 }}
@@ -123,7 +123,7 @@ export default function HowItWorks() {
               lista.
             </p>
 
-            {/* Step navigation */}
+            {/* Navegacion de pasos */}
             <div className="space-y-3">
               {steps.map((step, i) => {
                 const isActive = i === active;
@@ -162,7 +162,7 @@ export default function HowItWorks() {
               })}
             </div>
 
-            {/* Current step description */}
+            {/* Descripcion del paso actual */}
             <AnimatePresence mode="wait">
               <motion.p
                 key={active}
@@ -178,7 +178,7 @@ export default function HowItWorks() {
             </AnimatePresence>
           </motion.div>
 
-          {/* RIGHT: Image */}
+          {/* DERECHA: Imagen */}
           <div className="lg:flex-1 min-w-0">
             <div
               className="relative w-full aspect-[4/5] sm:aspect-[16/12] lg:aspect-[4/3]"

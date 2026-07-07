@@ -50,7 +50,7 @@ export default function Hero() {
         background: 'linear-gradient(175deg, #0b1120 0%, #0f172a 60%, #111b30 100%)',
       }}
     >
-      {/* Subtle grid pattern overlay */}
+      {/* Superposicion sutil de patron de cuadricula */}
       <div
         className="absolute inset-0 opacity-[0.03] pointer-events-none"
         style={{
@@ -59,12 +59,12 @@ export default function Hero() {
         }}
       />
 
-      {/* Ambient glow in the center */}
+      {/* Brillo ambiental en el centro */}
       <div className="absolute top-[20%] left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-[#3b82f6]/10 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="container mx-auto px-6 relative z-10 flex flex-col items-center">
         
-        {/* Top Content: Typography & CTAs */}
+        {/* Contenido superior: Tipografia y CTAs */}
         <motion.div
           variants={staggerContainer}
           initial="hidden"
@@ -89,7 +89,7 @@ export default function Hero() {
             simple JAPISH usando tecnología NFC de última generación.
           </motion.p>
 
-          {/* Search bar (Original style) */}
+          {/* Barra de busqueda */}
           <motion.div variants={fadeUp} className="mb-10 w-full flex justify-center">
             <form
               onSubmit={handleSearch}
@@ -118,7 +118,7 @@ export default function Hero() {
             </form>
           </motion.div>
 
-          {/* CTAs */}
+          {/* Llamadas a la accion */}
           <motion.div
             variants={fadeUp}
             className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 w-full mb-6 lg:mb-8"
@@ -140,14 +140,14 @@ export default function Hero() {
           </motion.div>
         </motion.div>
 
-        {/* Bottom Content: Hero Image */}
+        {/* Contenido inferior: Imagen del heroe */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 40 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           className="relative w-full max-w-[800px] flex items-center justify-center mx-auto mt-4"
         >
-          {/* Intense ambient glow behind the image for a premium look */}
+          {/* Brillo intenso detras de la imagen para aspecto premium */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[80%] bg-[#3b82f6]/15 rounded-[100%] blur-[100px] pointer-events-none mix-blend-screen" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[60%] bg-[#1e3a8f]/30 rounded-[100%] blur-[120px] pointer-events-none" />
 

@@ -93,10 +93,10 @@ export default function Features() {
           </p>
         </motion.div>
 
-        {/* Bento Grid */}
+        {/* Cuadricula Bento */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 auto-rows-fr">
 
-          {/* Large cell: Instantáneo */}
+          {/* Celda grande: Instantaneo */}
           <motion.div
             className="lg:col-span-2 lg:row-span-1 rounded-2xl border border-white/[0.06] bg-white/[0.03] p-8 sm:p-10 flex flex-col justify-between group hover:border-[#3b82f6]/30 hover:bg-white/[0.05] transition-all duration-300"
             initial="hidden"
@@ -124,7 +124,7 @@ export default function Features() {
             </div>
           </motion.div>
 
-          {/* Large cell: Tu propia página web */}
+          {/* Celda grande: Tu propia pagina web */}
           <motion.div
             className="lg:col-span-2 lg:row-span-1 rounded-2xl border border-white/[0.06] bg-white/[0.03] p-8 sm:p-10 flex flex-col justify-between group hover:border-[#3b82f6]/30 hover:bg-white/[0.05] transition-all duration-300 md:order-3 lg:order-none"
             initial="hidden"
@@ -159,7 +159,7 @@ export default function Features() {
             </div>
           </motion.div>
 
-          {/* Small cells */}
+          {/* Celdas pequenas */}
           {features
             .slice(1)
             .filter((f) => f.size === 'small')
