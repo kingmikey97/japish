@@ -173,7 +173,7 @@ export default function LayoutArquitecto({ profileData, template, handleWhatsApp
                   className={`flex flex-col items-center justify-center gap-1.5 ${template.colors.buttonSecondary} py-3 px-2 ${template.styles.buttonRounded} transition-all`}
                 >
                   <Icon size={20} className={template.colors.accent} />
-                  <span className={`text-xs ${template.colors.primary} text-center leading-tight`}>
+                  <span className={`text-xs text-center leading-tight`}>
                     {link.label}
                   </span>
                 </a>

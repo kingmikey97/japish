@@ -69,13 +69,12 @@ export default function LayoutBasic({ profileData, template, handleWhatsApp }) {
         {profileData.whatsapp && (
           <button
             onClick={handleWhatsApp}
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-3xl flex items-center justify-center gap-2 transition-colors"
+            className={`w-full bg-gradient-to-r ${template.colors.buttonPrimary} text-white font-bold py-3 px-4 rounded-3xl flex items-center justify-center gap-2 transition-all`}
           >
-            <MessageCircle size={22} />
+            <MessageCircle size={22} className="mb-1"/>
             Contactar por WhatsApp
           </button>
         )}
-
       </div>
     </div>
   );

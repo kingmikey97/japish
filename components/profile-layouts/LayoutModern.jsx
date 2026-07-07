@@ -59,9 +59,9 @@ export default function LayoutModern({ profileData, template, handleWhatsApp }) 
         {profileData.whatsapp && (
           <button
             onClick={handleWhatsApp}
-            className={`w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-4 ${template.styles.buttonRounded} shadow-lg hover:shadow-xl hover:scale-103 transition-all flex items-center justify-center gap-2`}
+            className={`w-full bg-gradient-to-r ${template.colors.buttonPrimary} text-white font-bold py-3 px-4 rounded-3xl flex items-center justify-center gap-2 transition-all`}
           >
-            <MessageCircle size={24} />
+            <MessageCircle size={22} className="mb-1"/>
             Contactar por WhatsApp
           </button>
         )}
