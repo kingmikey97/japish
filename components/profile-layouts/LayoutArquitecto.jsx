@@ -124,7 +124,7 @@ export default function LayoutArquitecto({ profileData, template, handleWhatsApp
         <div className={`${template.colors.card} ${template.styles.cardRounded} ${template.styles.shadow} border ${template.colors.cardBorder} overflow-hidden`}>
 
           {/* HEADER — foto | nombre | info */}
-          <div className="flex items-center gap-5 p-6 border-b border-slate-200/80">
+          <div className="flex flex-col sm:flex-row items-center sm:items-center gap-4 sm:gap-5 p-6 border-b border-slate-200/80 text-center sm:text-left">
 
             {/* Foto circular */}
             <div className="shrink-0">

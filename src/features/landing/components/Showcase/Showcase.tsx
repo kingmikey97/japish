@@ -36,7 +36,7 @@ export default function Showcase() {
             className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tighter text-[#020617] mb-5 leading-[1.1]"
             style={{ fontFamily: 'var(--font-dm-sans)' }}
           >
-            Ve cómo funciona en acción
+            Ve cómo funciona en acción con datos reales
           </h2>
           <p 
             className="text-lg text-slate-600 font-medium max-w-[45ch]"
