@@ -417,7 +417,7 @@ export default function ProfileCard({ username }) {
 
         {/* FLOATING CHAT BUTTON */}
         <div className="fixed bottom-6 right-6 z-50">
-
+{/* 
           {showChatBubble && (
             <div className="absolute bottom-20 right-0 mb-2 animate-bounce">
               <div className="relative bg-white rounded-2xl shadow-2xl p-4 max-w-xs">
@@ -437,15 +437,15 @@ export default function ProfileCard({ username }) {
                 </div>
               </div>
             </div>
-          )}
+          )} */}
 
-          <a
+          {/* <a
             href="/japish"
             className={`group w-16 h-16 bg-gradient-to-br ${template.colors.buttonPrimary} rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-all hover:shadow-cyan-500/50 border-4 border-white`}
           >
             <span className="text-white text-2xl font-bold">si</span>
             <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full animate-pulse border-2 border-white"></div>
-          </a>
+          </a> */}
 
         </div>
 
