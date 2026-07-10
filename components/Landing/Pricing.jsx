@@ -6,8 +6,8 @@ export default function Pricing() {
   
   const plans = [
     {
-      name: "Básico",
-      price: "200 bs.",
+      name: "Profesional",
+      price: "350 bs.",
       description: "Perfecto para empezar",
       features: [
         "1 tarjeta NFC/QR mas su impresion",
