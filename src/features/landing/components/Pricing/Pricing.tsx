@@ -22,47 +22,49 @@ interface PricingPlan {
 
 const plans: PricingPlan[] = [
   {
-    name: "Básico",
-    price: "200 bs.",
+    name: "Profesional",
+    price: "350 bs.",
     description: "Perfecto para empezar",
     features: [
       "1 tarjeta NFC/QR mas su impresion",
-      "3 diseños a elegir",
+      "10 diseños a elegir (colores a eleccion)",
       "Actualizaciones ilimitadas",
-      "Hasta 5 links",
+      "todos los links que guste",
       "Soporte continuo",
+      "Seccion de Servicios o tu Catalogo"
     ],
-    cta: "Comenzar",
+    cta: "Comenzar como profesional",
     popular: false
   },
   {
-    name: "Profesional",
-    price: "250 bs.",
+    name: "Premiun",
+    price: "450 bs.",
     description: "El más elegido",
     features: [
-      "Todo del plan Básico",
-      "5 diseños premium",
-      "Breve apartado de productos o servicios",
-      "Hasta 10 Links",
-      "Soporte prioritario"
+      "Todo del plan Profesional",
+      "Diseño Totalmente propio",
+      "Agregado de funcionalidades extra",
+      "Asesoria de Branding",
+      "Panel propio de administracion",
+      "(Precio puede variar de acuerdo a la complejidad)"
     ],
-    cta: "Elegir Pro",
+    cta: "Elegir Premiun",
     popular: true
   },
   {
-    name: "Premium",
-    price: "350 bs.",
+    name: "Empresarial",
+    price: "- - - bs.",
     description: "Máxima personalización",
     features: [
       "Todo del plan Profesional",
-      "Diseño 100% único (lo hacemos contigo)",
-      "Hasta tres apartados de tus servicios o productos",
-      "Links Ilimitados",
-      "Consultoria de Branding",
+      "Diseño de Dashboard de desempeño",
+      "Dominio totalmente propio",
+      "Asesoramiento de desarrollo del sistema",
+      "Mantenimiento continuo",
       "Soporte 24/7",  
-      "(El precio puede variar de acuerdo a complejidad)"      
+      "El precio es netamente negociado con la empresa"      
     ],
-    cta: "Ir Premium",
+    cta: "Agendar Reunion",
     popular: false
   }
 ];
