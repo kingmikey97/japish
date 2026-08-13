@@ -1135,7 +1135,7 @@ export default function ProfileCard({ username }) {
                           </h3>
 
                           <p className="text-xs text-zinc-400 mt-1">
-                            Completa la información para esta simulación.
+                            Completa la información del contacto.
                           </p>
                         </div>
 
@@ -1486,7 +1486,7 @@ export default function ProfileCard({ username }) {
                           </div>
 
                           <h3 className="text-xl sm:text-2xl font-black text-white mt-4">
-                            ¡Simulación completada!
+                            ¡Pago completado!
                           </h3>
 
                           <p className="text-xs text-zinc-400 mt-2">
